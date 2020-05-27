@@ -155,7 +155,7 @@ public class GetMetrics {
 	    			    }
 	    			    iv=fv-(fv-ov)*p;
 	    			    if(ov>=iv && ov<fv) {
-	    			    	ArrayList<String> riferimento=new ArrayList<String>();
+	    			    	ArrayList<String> riferimento=new ArrayList<>();
 	    			    	riferimento.add(Integer.toString(iv));
 	    			    	riferimento.add(object1.getJSONObject(k).get("key").toString());
 	    			    	ticket.add(riferimento);

@@ -75,8 +75,8 @@ public class GetConnection {
 		   
 	}
 	public static URLConnection takeUrlConnection(String url) throws IOException {
-		URL url_1 = new URL(url);
-        URLConnection uc = url_1.openConnection();
+		URL url1 = new URL(url);
+        URLConnection uc = url1.openConnection();
         uc.setRequestProperty("X-Requested-With", "Curl");
         String username =  "Brielino";
         BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\gabri\\OneDrive\\Desktop\\Token richieste autorizzate GitHub.txt"));
