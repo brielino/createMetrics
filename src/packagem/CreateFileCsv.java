@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.json.JSONArray;
@@ -19,7 +20,7 @@ public class CreateFileCsv {
 	public static final String COMMIT="commit";
 	public static final String AUTHOR="author";
 	
-	public static ArrayList<Integer> takeSha(Date data,Date data1,String projectName) throws IOException, JSONException {
+	public static List<Integer> takeSha(Date data,Date data1,String projectName) throws IOException, JSONException {
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projectName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
 		ArrayList<Integer> arraySha= new ArrayList<>();
@@ -106,15 +107,15 @@ public class CreateFileCsv {
 					    String[] release = z.getJSONObject(i).getString("name").toString().split("-");
 					    nameRelease=release[1];
 				    	verVersions=TakeInfoProject.verificsVersion(nameRelease,projName);
-					    if(nameRelease.compareTo(nameRelease1)!=0 && verVersions.size()!=0) {
+					    if(nameRelease.compareTo(nameRelease1)!=0 && !verVersions.isEmpty()) {
 					    	ArrayList<Date> datee =null;
-					    	indiceRelease=verVersions.get(1).toString();
+					    	indiceRelease=verVersions.get(1);
 						    if(indiceRelease.compareTo("")==0){
 						    	datee = OperationDate.calcoloDate("1",projName);
 						    }else {
 						    	datee = OperationDate.calcoloDate(indiceRelease,projName);
 						    }
-					    	ArrayList<Integer> shaCode=takeSha(datee.get(0),datee.get(1),projName);
+					    	ArrayList<Integer> shaCode=(ArrayList<Integer>) takeSha(datee.get(0),datee.get(1),projName);
 					    	nameRelease1=nameRelease;
 					    	for(j=0; j < c.length();j++) {
 								String[] v=c.getJSONObject(j).getString("path").split("/");
