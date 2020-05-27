@@ -51,7 +51,7 @@ public class CreateFileCsv {
 		/*TakeInfoProject.takeJiraInfo(PERCORSO+projName+"Jira.json",projName);
 		TakeInfoProject.takeContentClass(PERCORSO+projName+"Content.txt",projName);
 		TakeInfoProject.getCommit(PERCORSO+projName+"Commit.txt", projName);*/
-		ArrayList<ArrayList<String>> ticketBuggy=GetMetrics.foundBuggy(projName);
+		ArrayList<ArrayList<String>> ticketBuggy=(ArrayList<ArrayList<String>>) GetMetrics.foundBuggy(projName);
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
 	    ArrayList<ArrayList<String>> fileBuggy= (ArrayList<ArrayList<String>>) GetMetrics.foundClassBuggy((List<ArrayList<String>>)ticketBuggy,object);

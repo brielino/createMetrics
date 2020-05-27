@@ -10,6 +10,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.json.JSONArray;
@@ -78,14 +79,14 @@ public class GetMetrics {
 	}
 
 	
-	public static HashMap<String, String> readFileName(String nameFile) {
+	public static Map<String, String> readFileName(String nameFile) {
 		 String csvFile = nameFile;
 	     BufferedReader br = null;
 	     String line = "";
 	     String cvsSplitBy = ",";
 	     Integer salta=0;
 	     Logger logger = Logger.getAnonymousLogger();
-	     HashMap<String,String> versionsName= new HashMap<>();
+	     Map<String,String> versionsName= new HashMap<>();
 	     try {
 
 	         br = new BufferedReader(new FileReader(csvFile));
@@ -115,18 +116,18 @@ public class GetMetrics {
 		return versionsName;
 	}
 	
-	public static ArrayList<ArrayList<String>> foundBuggy(String projectName) throws  JSONException, IOException {
+	public static List<ArrayList<String>> foundBuggy(String projectName) throws  JSONException, IOException {
 		String token = new String(Files.readAllBytes(Paths.get("C:\\Users\\gabri\\OneDrive\\Desktop\\"+projectName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
 	    String token1 =new String(Files.readAllBytes(Paths.get("C:\\Users\\gabri\\OneDrive\\Desktop\\"+projectName+"Jira.json")));
 	    JSONArray object1 =new JSONArray(token1);
-		ArrayList<ArrayList<String>> ticket=new ArrayList<>();
+		List<ArrayList<String>> ticket=new ArrayList<>();
 	    int p=0;
 		int ov=0;
 		int fv=0;
 		int iv=0;
 	    Boolean prima;
-		HashMap<String,String> numberVersions= readFileName("C:\\Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo Semestre 1\\ISW2\\Falessi\\20200407 Falessi Deliverable 2 Milestone 1 V2\\GetReleaseInfo\\"+projectName+"VersionInfo.csv");
+		HashMap<String,String> numberVersions= (HashMap<String, String>) readFileName("C:\\Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo Semestre 1\\ISW2\\Falessi\\20200407 Falessi Deliverable 2 Milestone 1 V2\\GetReleaseInfo\\"+projectName+"VersionInfo.csv");
 	    String nameReleaseIv="";
 	    String nameReleaseFv="";
 	    String nameReleaseOv="";
@@ -291,6 +292,5 @@ public class GetMetrics {
 			}
 		}
 		return fileBuggy;
-		
 	}
 }
