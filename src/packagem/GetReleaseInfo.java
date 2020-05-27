@@ -15,10 +15,10 @@ import org.json.JSONArray;
 
 public class GetReleaseInfo {
 	
-	   public static HashMap<LocalDateTime, String> releaseNames;
-	   public static HashMap<LocalDateTime, String> releaseID;
-	   public static ArrayList<LocalDateTime> releases;
-	   public static Integer numVersions;
+	protected static  HashMap<LocalDateTime, String> releaseNames;
+	protected static  HashMap<LocalDateTime, String> releaseID;
+	protected static ArrayList<LocalDateTime> releases;
+	protected static Integer numVersions;
 
 public static void creazione() throws IOException, JSONException {
 	   String projName ="TAJO";
