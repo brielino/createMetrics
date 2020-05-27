@@ -49,35 +49,14 @@ public class CreateFileCsv {
 
 	public static void main(String[] args) throws IOException, JSONException, InterruptedException {
 
-		String projName ="TAJO";
+		String projName ="BOOKKEEPER";
 		/*TakeInfoProject.takeJiraInfo(PERCORSO+projName+"Jira.json",projName);
 		TakeInfoProject.takeContentClass(PERCORSO+projName+"Content.txt",projName);
 		TakeInfoProject.getCommit(PERCORSO+projName+"Commit.txt", projName);*/
 		ArrayList<ArrayList<String>> ticketBuggy=GetMetrics.foundBuggy(projName);
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
-	    Boolean prima;
-	    Boolean seconda;
-	    ArrayList<ArrayList<String>> fileBuggy= new ArrayList<>();
-		for(int k = 0;k<ticketBuggy.size();k++) {
-			if(Integer.parseInt(ticketBuggy.get(k).get(0))!=0 && Integer.parseInt(ticketBuggy.get(k).get(0))>0) {
-				for(int i=0; i<object.length(); i++) {
-					prima=object.getJSONObject(i).getJSONObject(COMMIT).getString("message").contains(ticketBuggy.get(k).get(1)+":");
-					seconda=object.getJSONObject(i).getJSONObject(COMMIT).getString("message").contains("["+ticketBuggy.get(k).get(1)+"]");
-					if(prima || seconda) {
-						for(int z = 0;z<object.getJSONObject(k).getJSONArray("files").length();z++) {
-							ArrayList<String> fb = new ArrayList<>();
-							String version =ticketBuggy.get(k).get(0);
-							String file = object.getJSONObject(k).getJSONArray("files").getJSONObject(z).getString("filename").toString();
-							fb.add(version);
-							fb.add(file);
-							fileBuggy.add(fb);
-						}
-					}
-				}
-					
-			}
-		}
+	    ArrayList<ArrayList<String>> fileBuggy= GetMetrics.foundClassBuggy(ticketBuggy,object);
 		BufferedReader reader = new BufferedReader(new FileReader(PERCORSO+projName+"Content.txt"));
 	    String line = reader.readLine();
 		FileWriter fileWriter = null;

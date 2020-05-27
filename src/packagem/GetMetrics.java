@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.json.JSONArray;
@@ -110,16 +111,7 @@ public class GetMetrics {
 	     }
 		return versionsName;
 	}
-	public static ArrayList<String> takeAffectedVersions(String projectName,ArrayList<Date> dateAV) throws IOException{
-		ArrayList<String> affVer= new ArrayList<>();
-		for(int i = 0;i<dateAV.size();i++) {
-			int version=foundVersion(dateAV.get(i),projectName);
-			if(version!=0) {
-				affVer.add(Integer.toString(version));
-			}
-		}
-		return affVer;
-	}
+	
 	public static ArrayList<ArrayList<String>> foundBuggy(String projectName) throws  JSONException, IOException {
 		String token = new String(Files.readAllBytes(Paths.get("C:\\Users\\gabri\\OneDrive\\Desktop\\"+projectName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
@@ -274,5 +266,29 @@ public class GetMetrics {
 		values.add(buggy);
 		return values;
 
+	}
+	public static ArrayList<ArrayList<String>> foundClassBuggy(ArrayList<ArrayList<String>> ticketBuggy,JSONArray object) throws JSONException{
+		Boolean prima;
+	    ArrayList<ArrayList<String>> fileBuggy= new ArrayList<>();
+		for(int k = 0;k<ticketBuggy.size();k++) {
+			if(Integer.parseInt(ticketBuggy.get(k).get(0))!=0 && Integer.parseInt(ticketBuggy.get(k).get(0))>0) {
+				for(int i=0; i<object.length(); i++) {
+					prima=GetMetrics.verifiCorrisp(object.getJSONObject(i).getJSONObject(COMMIT).getString("message"),ticketBuggy.get(k).get(1));
+					if(prima) {
+						for(int z = 0;z<object.getJSONObject(k).getJSONArray("files").length();z++) {
+							ArrayList<String> fb = new ArrayList<>();
+							String version =ticketBuggy.get(k).get(0);
+							String file = object.getJSONObject(k).getJSONArray("files").getJSONObject(z).getString("filename").toString();
+							fb.add(version);
+							fb.add(file);
+							fileBuggy.add(fb);
+						}
+					}
+				}
+					
+			}
+		}
+		return fileBuggy;
+		
 	}
 }
