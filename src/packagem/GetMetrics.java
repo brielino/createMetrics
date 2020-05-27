@@ -23,6 +23,8 @@ public class GetMetrics {
 	public static final String AUTHOR="author";
 	public static final String FIXVERSIONS="fixVersions";
 	public static final String FILES="files";
+	public static final String ADDITIONS="additions";
+	public static final String DELETIONS="deletions";
 	
 	public static String getSize(String code) {
 		String classe=new String(Base64.getMimeDecoder().decode(code));
@@ -185,10 +187,10 @@ public class GetMetrics {
 	    				for(int z = 0;z<object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).length();z++) {
 	    					for (String key : numberVersions.keySet()) {
 		    		            String value = numberVersions.get(key);
-		    		            String NOMEAV=object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).getJSONObject(z).getString("name");
-		    		            if(value.compareTo(NOMEAV)==0) {
+		    		            String nomeav=object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).getJSONObject(z).getString("name");
+		    		            if(value.compareTo(nomeav)==0) {
 		    		            	iv=Integer.parseInt(key);
-		    		            	ArrayList<String> riferimento=new ArrayList<String>();
+		    		            	ArrayList<String> riferimento=new ArrayList<>();
 			    			    	riferimento.add(Integer.toString(iv));
 			    			    	riferimento.add(object1.getJSONObject(k).get("key").toString());
 			    			    	ticket.add(riferimento);
@@ -234,19 +236,18 @@ public class GetMetrics {
 			}
 			for(int j=0; j<json1.length();j++) {
 				if(json1.getJSONObject(j).getString("filename").compareToIgnoreCase(fileName)==0) {
-					
-					if(json1.getJSONObject(j).getInt("additions")>maxLocAdd) {
-						maxLocAdd=json1.getJSONObject(j).getInt("additions");
+					if(json1.getJSONObject(j).getInt(ADDITIONS)>maxLocAdd) {
+						maxLocAdd=json1.getJSONObject(j).getInt(ADDITIONS);
 					}
 					count++;
 					nr=count;
-					churn=churn+(json1.getJSONObject(j).getInt("additions")-json1.getJSONObject(j).getInt("deletions"));
-					if(json1.getJSONObject(j).getInt("additions")-json1.getJSONObject(j).getInt("deletions")>maxChurn) {
-						maxChurn=json1.getJSONObject(j).getInt("additions")-json1.getJSONObject(j).getInt("deletions");
+					churn=churn+(json1.getJSONObject(j).getInt(ADDITIONS)-json1.getJSONObject(j).getInt(DELETIONS));
+					if(json1.getJSONObject(j).getInt(ADDITIONS)-json1.getJSONObject(j).getInt(DELETIONS)>maxChurn) {
+						maxChurn=json1.getJSONObject(j).getInt(ADDITIONS)-json1.getJSONObject(j).getInt(DELETIONS);
 					}
-					locAdd=locAdd+json1.getJSONObject(j).getInt("additions");
+					locAdd=locAdd+json1.getJSONObject(j).getInt(ADDITIONS);
 					locT=locT +locAdd;
-					locT=locT +json1.getJSONObject(j).getInt("deletions");
+					locT=locT +json1.getJSONObject(j).getInt(DELETIONS);
 					locT=locT +json1.getJSONObject(j).getInt("changes");
 					break;
 					}
@@ -268,7 +269,7 @@ public class GetMetrics {
 		return values;
 
 	}
-	public static List<ArrayList<String>> foundClassBuggy(ArrayList<ArrayList<String>> ticketBuggy,JSONArray object) throws JSONException{
+	public static List<ArrayList<String>> foundClassBuggy(List<ArrayList<String>> ticketBuggy,JSONArray object) throws JSONException{
 		Boolean prima;
 	    List<ArrayList<String>> fileBuggy= new ArrayList<>();
 		for(int k = 0;k<ticketBuggy.size();k++) {

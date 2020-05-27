@@ -54,7 +54,7 @@ public class CreateFileCsv {
 		ArrayList<ArrayList<String>> ticketBuggy=GetMetrics.foundBuggy(projName);
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
-	    ArrayList<ArrayList<String>> fileBuggy= (ArrayList<ArrayList<String>>) GetMetrics.foundClassBuggy(ticketBuggy,object);
+	    ArrayList<ArrayList<String>> fileBuggy= (ArrayList<ArrayList<String>>) GetMetrics.foundClassBuggy((List<ArrayList<String>>)ticketBuggy,object);
 		BufferedReader reader = new BufferedReader(new FileReader(PERCORSO+projName+"Content.txt"));
 	    String line = reader.readLine();
 		FileWriter fileWriter = null;
