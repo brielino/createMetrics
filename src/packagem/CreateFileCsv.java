@@ -49,9 +49,9 @@ public class CreateFileCsv {
 	public static void main(String[] args) throws IOException, JSONException, InterruptedException {
 
 		String projName ="TAJO";
-		//TakeInfoProject.takeJiraInfo("C:\\Users\\gabri\\OneDrive\\Desktop\\"+projName+"Jira.json",projName);
-		//TakeInfoProject.takeContentClass("C:\\Users\\gabri\\OneDrive\\Desktop\\"+projName+"Content.txt",projName);
-		//TakeInfoProject.getCommit("C:\\Users\\gabri\\OneDrive\\Desktop\\"+projName+"Commit.txt", projName);
+		/*TakeInfoProject.takeJiraInfo(PERCORSO+projName+"Jira.json",projName);
+		TakeInfoProject.takeContentClass(PERCORSO+projName+"Content.txt",projName);
+		TakeInfoProject.getCommit(PERCORSO+projName+"Commit.txt", projName);*/
 		ArrayList<ArrayList<String>> ticketBuggy=GetMetrics.foundBuggy(projName);
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
@@ -105,12 +105,10 @@ public class CreateFileCsv {
 						JSONArray c=d.getJSONArray("tree");
 					    String[] release = z.getJSONObject(i).getString("name").toString().split("-");
 					    nameRelease=release[1];
-					    System.out.println(release[1]);
 				    	verVersions=TakeInfoProject.verificsVersion(nameRelease,projName);
 					    if(nameRelease.compareTo(nameRelease1)!=0 && verVersions.size()!=0) {
 					    	ArrayList<Date> datee =null;
 					    	indiceRelease=verVersions.get(1).toString();
-					    	System.out.println(indiceRelease);
 						    if(indiceRelease.compareTo("")==0){
 						    	datee = OperationDate.calcoloDate("1",projName);
 						    }else {

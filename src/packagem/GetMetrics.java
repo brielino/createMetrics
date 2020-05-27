@@ -139,8 +139,6 @@ public class GetMetrics {
 	    	if(object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).length()==0) {
 	    		for(int i = 0;i<object.length();i++) {
 	    			prima=verifiCorrisp(object.getJSONObject(i).getJSONObject(COMMIT).getString(MESSAGE),object1.getJSONObject(k).get("key").toString());
-	    			//prima=object.getJSONObject(i).getJSONObject("commit").getString("message").contains(object1.getJSONObject(k).get("key").toString()+":");
-	    			//seconda=object.getJSONObject(i).getJSONObject("commit").getString("message").contains("["+object1.getJSONObject(k).get("key").toString()+"]");
 	    			if(prima) {
 	    				nameReleaseOv = object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date");
 	    				Date dataOv = OperationDate.convertData(nameReleaseOv);
@@ -167,8 +165,6 @@ public class GetMetrics {
 	    	}else {
 	    		for(int i = 0;i<object.length();i++) {
 	    			prima=verifiCorrisp(object.getJSONObject(i).getJSONObject(COMMIT).getString(MESSAGE),object1.getJSONObject(k).get("key").toString());
-	    			//prima=object.getJSONObject(i).getJSONObject("commit").getString("message").contains(object1.getJSONObject(k).get("key").toString()+":");
-	    			//seconda=object.getJSONObject(i).getJSONObject("commit").getString("message").contains("["+object1.getJSONObject(k).get("key").toString()+"]");
 	    			if(prima) {
 	    				nameReleaseIv = object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).getJSONObject(0).getString("name").toString();
 	    				if(object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(FIXVERSIONS).length()==0) {
