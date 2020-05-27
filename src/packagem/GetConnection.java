@@ -18,11 +18,11 @@ public class GetConnection {
 
 	public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
 		URLConnection uc = takeUrlConnection(url); 
-		InputStreamReader inputStreamReader = new InputStreamReader(uc.getInputStream());
+		InputStreamReader inputStreamReader = null;
 		try {
+			inputStreamReader = new InputStreamReader(uc.getInputStream());
 		    BufferedReader rd = new BufferedReader(inputStreamReader);
-		    JSONObject  jsonObject = new JSONObject(readAll(rd));
-		    return jsonObject;
+		    return new JSONObject(readAll(rd));
 		} finally {
 		      inputStreamReader.close();
 		}
@@ -34,8 +34,7 @@ public class GetConnection {
 		   try {
 			   BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 			   String jsonText = readAll(rd);
-			   JSONObject json = new JSONObject(jsonText);
-			   return json;
+			   return new JSONObject(jsonText);
 		   } finally {
 			   is.close();
 		   }
@@ -54,8 +53,7 @@ public class GetConnection {
 	    try {
 	       BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 	       String jsonText = readAll(rd);
-	       JSONArray json = new JSONArray(jsonText);
-	       return json;
+	       return new JSONArray(jsonText);
 	     } finally {
 	       is.close();
 	     }
@@ -64,11 +62,11 @@ public class GetConnection {
 		//Utilizzato per fare richieste autenticate che permette di fare 5000 richieste l'ora
         URLConnection uc = takeUrlConnection(url);
 
-		InputStreamReader inputStreamReader = new InputStreamReader(uc.getInputStream());
+		InputStreamReader inputStreamReader = null;
 		try {
+			inputStreamReader = new InputStreamReader(uc.getInputStream());
 		    BufferedReader rd = new BufferedReader(inputStreamReader);
-		    JSONArray  jsonObject = new JSONArray(readAll(rd));
-		    return jsonObject;
+		    return new JSONArray(readAll(rd));
 		} finally {
 		      inputStreamReader.close();
 		}
