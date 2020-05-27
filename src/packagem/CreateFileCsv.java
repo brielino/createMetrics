@@ -111,9 +111,9 @@ public class CreateFileCsv {
 					    	ArrayList<Date> datee =null;
 					    	indiceRelease=verVersions.get(1);
 						    if(indiceRelease.compareTo("")==0){
-						    	datee = OperationDate.calcoloDate("1",projName);
+						    	datee = (ArrayList<Date>) OperationDate.calcoloDate("1",projName);
 						    }else {
-						    	datee = OperationDate.calcoloDate(indiceRelease,projName);
+						    	datee = (ArrayList<Date>) OperationDate.calcoloDate(indiceRelease,projName);
 						    }
 					    	ArrayList<Integer> shaCode=(ArrayList<Integer>) takeSha(datee.get(0),datee.get(1),projName);
 					    	nameRelease1=nameRelease;

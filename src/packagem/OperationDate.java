@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class OperationDate {
@@ -15,22 +16,18 @@ public class OperationDate {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Logger logger = Logger.getAnonymousLogger();
 	    try {
-
-	        Date date = formatter.parse(dateInString);
-	        //System.out.println(date);
-	        //System.out.println(formatter.format(date));
-	        return date;
+	        return formatter.parse(dateInString);
 	    } catch (ParseException e) {
 	        logger.info("Errore nel parsiong");
 	    }
 		return null;
 	}
 	
-	public static ArrayList<Date> calcoloDate(String version,String projectName){
+	public static List<Date> calcoloDate(String version,String projectName){
 		Date dataFile=convertData(takeDataVersion(version,projectName));
 		int versionS=Integer.parseInt(version);
 		versionS++;
-		ArrayList<Date> values= new ArrayList<Date>();
+		ArrayList<Date> values= new ArrayList<>();
 		String versionSucc=Integer.toString(versionS);
 		if(takeDataVersion(versionSucc,projectName).equalsIgnoreCase(".")) {
 			values.add(dataFile);
