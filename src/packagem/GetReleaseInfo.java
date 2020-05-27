@@ -25,13 +25,13 @@ public static void creazione() throws IOException, JSONException {
 	   //Fills the arraylist with releases dates and orders them
 	   //Ignores releases with missing dates
 	   Logger logger = Logger.getAnonymousLogger();
-	   releases = new ArrayList<LocalDateTime>();
+	   releases = new ArrayList<>();
        Integer i;
        String url = "https://issues.apache.org/jira/rest/api/2/project/" + projName;
        JSONObject json = GetConnection.readJsonFromUrl1(url);
        JSONArray versions = json.getJSONArray("versions");
-       releaseNames = new HashMap<LocalDateTime, String>();
-       releaseID = new HashMap<LocalDateTime, String> ();
+       releaseNames = new HashMap<>();
+       releaseID = new HashMap<> ();
        for (i = 0; i < versions.length(); i++ ) {
           String name = "";
           String id = "";
@@ -83,7 +83,6 @@ public static void creazione() throws IOException, JSONException {
                logger.info("Error while flushing/closing fileWriter !!!");
 		        }
 		     }
-		         return;
 		   }
  
 	
@@ -92,13 +91,12 @@ public static void creazione() throws IOException, JSONException {
 		      LocalDateTime dateTime = date.atStartOfDay();
 		      if (!releases.contains(dateTime))
 		         releases.add(dateTime);
-		      releaseNames.put(dateTime, name);
-		      releaseID.put(dateTime, id);
-		      return;
+		         releaseNames.put(dateTime, name);
+		         releaseID.put(dateTime, id);
 		      }
    
 	   public static void main(String[] args) throws IOException, JSONException, InterruptedException {
 		   //creazione();
-		   CreateFileCsv.main(null);;
+		   CreateFileCsv.main(null);
 	   }
 }
