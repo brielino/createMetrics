@@ -38,7 +38,6 @@ public class GetMetrics {
 		return Integer.toString(size);
 	}
 	
-
 	public static int foundVersion(Date data,String projectName) throws IOException {
 		 String csvFile ="C:\\Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo Semestre 1\\ISW2\\Falessi\\20200407 Falessi Deliverable 2 Milestone 1 V2\\GetReleaseInfo\\"+projectName+"VersionInfo.csv";
 	     BufferedReader br = null;
