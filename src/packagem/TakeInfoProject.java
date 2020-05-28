@@ -32,20 +32,11 @@ public class TakeInfoProject {
 				int numberOfRequest=1;
 				String currentRelease="";
 				for(int i = 0 ; i < releaseUrl.length() ; i++){
-					if(numberOfRequest==4500) {
-						TimeUnit.HOURS.sleep(1);
-						numberOfRequest=0;
-					}
 					String[] release = releaseUrl.getJSONObject(i).getString("name").toString().split("-");
 					currentRelease=release[1];
 					if(!verificsVersion(currentRelease,projectName).isEmpty()){
 						JSONObject releaseActual =GetConnection.readJsonFromUrl(releaseUrl.getJSONObject(i).getJSONObject("commit").getString("url"));
-						numberOfRequest++;
-						if(numberOfRequest==4500) {
-							TimeUnit.HOURS.sleep(1);
-							numberOfRequest=0;
-						}
-						numberOfRequest++;
+						numberOfRequest=sleep(numberOfRequest)+2;
 						JSONObject filesF =GetConnection.readJsonFromUrl(releaseActual.getJSONObject("commit").getJSONObject("tree").getString("url")+"?recursive=1");
 						JSONArray files=filesF.getJSONArray("tree");
 						String[] releaseN = releaseUrl.getJSONObject(i).getString("name").toString().split("-");
@@ -56,11 +47,7 @@ public class TakeInfoProject {
 					    	for(int j = 0; j < files.length();j++) {
 								String[] v=files.getJSONObject(j).getString("path").split("/");
 								if(v[v.length-1].contains(".java")) {
-									if(numberOfRequest==4500) {
-										TimeUnit.HOURS.sleep(1);
-										numberOfRequest=0;
-									}
-									numberOfRequest++;
+									numberOfRequest=sleep(numberOfRequest)+1;
 									JSONObject sizeUrl=GetConnection.readJsonFromUrl(files.getJSONObject(j).getString("url"));
 									String content=sizeUrl.getString("content");
 									content = content.replaceAll("\r\n|\r|\n","");
@@ -185,5 +172,12 @@ public class TakeInfoProject {
             }
         }
 		return verVersion;		
+	}
+	public static int sleep(int nRequest) throws InterruptedException {
+		if(nRequest==4500) {
+			TimeUnit.HOURS.sleep(1);
+			nRequest=0;
+		}
+		return nRequest;
 	}
 }
