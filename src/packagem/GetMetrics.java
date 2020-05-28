@@ -261,10 +261,10 @@ public class GetMetrics {
 		if(count==0) {
 			count=1;
 		}
-		values.add(Float.toString(locAdd/count));
+		values.add(Float.toString((float)locAdd/count));
 		values.add(Integer.toString(churn));
 		values.add(Integer.toString(maxChurn));
-		values.add(Float.toString(churn/count));
+		values.add(Float.toString((float)churn/count));
 		values.add(Integer.toString(nr));
 		values.add(buggy);
 		return values;
