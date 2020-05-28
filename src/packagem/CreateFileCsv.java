@@ -20,6 +20,7 @@ public class CreateFileCsv {
 	public static final String COMMIT="commit";
 	public static final String AUTHOR="author";
 	
+
 	public static List<Integer> takeSha(Date data,Date data1,String projectName) throws IOException, JSONException {
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projectName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
@@ -31,18 +32,16 @@ public class CreateFileCsv {
 				}else {
 					return arraySha;
 				}
-			}else {
-				if(OperationDate.convertData(object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date")).after(data)) {
+			}else if(OperationDate.convertData(object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date")).after(data)) {
 					if(OperationDate.convertData(object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date")).before(data1)) {
 						arraySha.add(i);
 					}
-				}else {
-					return arraySha;
-				}
+			}else {
+				return arraySha;
 			}
 		}
 		return arraySha;
-	 }
+	}
 
 
 	public static void main(String[] args) throws IOException, JSONException, InterruptedException {
@@ -89,7 +88,9 @@ public class CreateFileCsv {
 						    }else {
 						    	datee = (ArrayList<Date>) OperationDate.calcoloDate(indiceRelease,projName);
 						    }
+						    System.out.println(datee.get(0)+" "+datee.get(0));
 					    	ArrayList<Integer> shaCode=(ArrayList<Integer>) takeSha(datee.get(0),datee.get(1),projName);
+					    	System.out.println(shaCode);
 					    	nameRelease1=nameRelease;
 					    	for(j=0; j < c.length();j++) {
 								String[] v=c.getJSONObject(j).getString("path").split("/");
