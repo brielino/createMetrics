@@ -100,7 +100,6 @@ public static void creazione() throws IOException, JSONException {
 	   }
    
 	   public static void main(String[] args) throws IOException, JSONException, InterruptedException {
-		   //creazione();
 		   CreateFileCsv.main(null);
 	   }
 }
