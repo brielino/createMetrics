@@ -22,18 +22,12 @@ public class GetConnection {
 
 	public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
 		URLConnection uc = takeUrlConnection(url); 
-		InputStreamReader inputStreamReader = null;
-		try {
-			inputStreamReader = new InputStreamReader(uc.getInputStream());
-		    BufferedReader rd = new BufferedReader(inputStreamReader);
+		try(InputStreamReader inputStreamReader= new InputStreamReader(uc.getInputStream());
+		    BufferedReader rd = new BufferedReader(inputStreamReader)) {
 		    return new JSONObject(readAll(rd));
-		} finally {
-			if(inputStreamReader!=null) {
-				inputStreamReader.close();
-			}
 		}
-		   
 	}
+
 	
 	public static JSONObject readJsonFromUrl1(String url) throws IOException, JSONException {
 		   InputStream is = new URL(url).openStream();
@@ -67,15 +61,9 @@ public class GetConnection {
 		//Utilizzato per fare richieste autenticate che permette di fare 5000 richieste l'ora
         URLConnection uc = takeUrlConnection(url);
 
-		InputStreamReader inputStreamReader = null ;
-		try {
-			inputStreamReader = new InputStreamReader(uc.getInputStream());
-		    BufferedReader rd = new BufferedReader(inputStreamReader);
+		try(InputStreamReader inputStreamReader = new InputStreamReader(uc.getInputStream());
+		    BufferedReader rd = new BufferedReader(inputStreamReader)) {
 		    return new JSONArray(readAll(rd));
-		} finally {
-			if(inputStreamReader!=null) {
-				inputStreamReader.close();
-			}
 		}
 		   
 	}

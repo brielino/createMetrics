@@ -1,4 +1,4 @@
-ackage packagem;
+package packagem;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

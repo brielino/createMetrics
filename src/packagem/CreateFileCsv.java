@@ -54,12 +54,10 @@ public class CreateFileCsv {
 	    ArrayList<ArrayList<String>> fileBuggy= (ArrayList<ArrayList<String>>) GetMetrics.foundClassBuggy((List<ArrayList<String>>)ticketBuggy,object);
 		BufferedReader reader = new BufferedReader(new FileReader(PERCORSO+projName+"Content.txt"));
 	    String line = reader.readLine();
-		FileWriter fileWriter = null;
 		ArrayList<String> verVersions= new ArrayList<>();
 		Logger logger = Logger.getAnonymousLogger();
 		String filePath=PERCORSO+"Metriche"+projName+".csv";
-		try{
-			fileWriter = new FileWriter(filePath);
+		try(FileWriter fileWriter = new FileWriter(filePath)){
 			fileWriter.append("Versione,FileName,LOC_touched,LOC_added,MAX_LOC_Added,AVG_LOC_Added,Churn,MAX_Churn,AVG_Churn,Size,NR,Buggy\n");
 			String st1="https://api.github.com/repos/apache/";
 			String st2="/tags";
@@ -128,14 +126,12 @@ public class CreateFileCsv {
 					    }
 					    }
 				}else {
+					fileWriter.flush();
 					break;
 				}
 			}
 	    }catch (IOException e) {
 	    	logger.info("Errore");
-	    }finally {
-	    	fileWriter.flush();
-	    	fileWriter.close();
 	    }
 	}
 }
