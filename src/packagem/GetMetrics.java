@@ -28,7 +28,7 @@ public class GetMetrics {
 	public static final String DELETIONS="deletions";
 	
 	public GetMetrics() {
-		
+		throw new UnsupportedOperationException();
 	}
 	
 	public static String getSize(String code) {

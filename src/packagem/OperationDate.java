@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class OperationDate {
 	
 	public OperationDate() {
-		
+		throw new UnsupportedOperationException();
 	}
 
 	public static Date convertData(String dateInString) {
