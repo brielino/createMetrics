@@ -45,15 +45,13 @@ public class OperationDate {
 	
 	public static String takeDataVersion(String version,String projectName) {
 		String csvFile = "C:\\Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo Semestre 1\\ISW2\\Falessi\\20200407 Falessi Deliverable 2 Milestone 1 V2\\GetReleaseInfo\\"+projectName+"VersionInfo.csv";
-	    BufferedReader br = null;
 	    String line = "";
 	    String cvsSplitBy = ",";
 	    Integer salta=0;
 	    String dateVersion =".";
 		Logger logger = Logger.getAnonymousLogger();
-	    try {
+	    try (BufferedReader br= new BufferedReader(new FileReader(csvFile))){
 
-	        br = new BufferedReader(new FileReader(csvFile));
 	        while ((line = br.readLine()) != null) {
 
 	            // use comma as separator
@@ -64,19 +62,12 @@ public class OperationDate {
 	            }
 	            salta++;
 	        }
+	        br.close();
 
 	    } catch (FileNotFoundException e) {
 	        logger.info("File non trovato");
 	    } catch (IOException e) {
 	        logger.info("Errore IO");
-	    } finally {
-	        if (br != null) {
-	            try {
-	                br.close();
-	            } catch (IOException e) {
-	                logger.info("Errore IO 1!");
-	            }
-	        }
 	    }
 	    return dateVersion;
 	}

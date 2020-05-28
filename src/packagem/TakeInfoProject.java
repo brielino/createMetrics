@@ -22,7 +22,6 @@ public class TakeInfoProject {
 		String st1="https://api.github.com/repos/apache/";
 		String st2="/tags";
 		String st3="?page=";
-		FileWriter file = null;
 		int t=1;
 		ArrayList<String> allContent = new ArrayList<>();
 		for(;;t++){
@@ -64,27 +63,22 @@ public class TakeInfoProject {
 			}
 		}
 		Logger logger = Logger.getAnonymousLogger();
-		try { 
+		try(FileWriter file= new FileWriter(fileUrl)) { 
 	        // Constructs a FileWriter given a file name, using the platform's default charset
-	        file = new FileWriter(fileUrl);
 	        for(int k = 0; k< allContent.size(); k++) {
 	        	file.write(allContent.get(k));
 	        	file.write("\n");
 	        }
+	        file.flush();
+	        file.close();
 
 	    } catch (IOException e) {
 	        logger.info("Errore IO!");
 
-	    } finally {
-	    	if(file!=null) {
-		    	file.flush();
-		        file.close();
-	    	}
 	    }
 	}
 	
 	public static void takeJiraInfo(String pathFile,String projectName) throws IOException, JSONException {
-		FileWriter file = null;
 		JSONArray json1=new JSONArray();
 	    Integer j = 0;
 	    Integer i = 0; 
@@ -104,26 +98,20 @@ public class TakeInfoProject {
 	       }
 	    } while (i < total);
 	    Logger logger = Logger.getAnonymousLogger();
-		try {
+		try(FileWriter file = new FileWriter(pathFile);) {
 			 
 	        // Constructs a FileWriter given a file name, using the platform's default charset
-	        file = new FileWriter(pathFile);
 	        file.write(json1.toString());
+	        file.flush();
+	        file.close();
 
 	    } catch (IOException e) {
 	        logger.info("Errore IO!");
-
-	    } finally {
-	    	if(file!=null) {
-		    	file.flush();
-		        file.close();
-	    	}
 	    }
 	}
 	
 	public static void getCommit(String urlFile,String projectName) throws IOException, JSONException {
 	    JSONArray object = new JSONArray();
-	    FileWriter file = null;
 		String url1 = "https://api.github.com/repos/apache/"+projectName+"/commits";
 		String url2 = "?page=";
 		String url3 = "&per_page=100";
@@ -142,20 +130,16 @@ public class TakeInfoProject {
 			}
 		}
 		Logger logger = Logger.getAnonymousLogger();
-		try {
+		try(FileWriter file= new FileWriter(urlFile)) {
 			 
 	        // Constructs a FileWriter given a file name, using the platform's default charset
-	        file = new FileWriter(urlFile);
 	        file.write(object.toString());
+	        file.flush();
+	        file.close();
 
 	    } catch (IOException e) {
 	        logger.info("Errore IO");
 
-	    } finally {
-	    	if(file!=null) {
-		    	file.flush();
-		        file.close();
-	    	}
 	    }
 	}
 	
