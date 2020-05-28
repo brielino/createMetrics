@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 public class OperationDate {
 	
-	public OperationDate() {
+	private OperationDate() {
 		throw new UnsupportedOperationException();
 	}
 

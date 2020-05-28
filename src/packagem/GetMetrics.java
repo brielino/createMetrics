@@ -27,7 +27,7 @@ public class GetMetrics {
 	public static final String ADDITIONS="additions";
 	public static final String DELETIONS="deletions";
 	
-	public GetMetrics() {
+	private GetMetrics() {
 		throw new UnsupportedOperationException();
 	}
 	

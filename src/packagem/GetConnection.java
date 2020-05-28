@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 public class GetConnection {
 	
-	public GetConnection() {
+	private GetConnection() {
 		throw new UnsupportedOperationException();
 	}
 
