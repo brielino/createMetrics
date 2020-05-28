@@ -62,7 +62,6 @@ public class OperationDate {
 	            }
 	            salta++;
 	        }
-	        br.close();
 
 	    } catch (FileNotFoundException e) {
 	        logger.info("File non trovato");

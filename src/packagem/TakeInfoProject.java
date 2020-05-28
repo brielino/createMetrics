@@ -70,7 +70,6 @@ public class TakeInfoProject {
 	        	file.write("\n");
 	        }
 	        file.flush();
-	        file.close();
 
 	    } catch (IOException e) {
 	        logger.info("Errore IO!");
@@ -103,7 +102,6 @@ public class TakeInfoProject {
 	        // Constructs a FileWriter given a file name, using the platform's default charset
 	        file.write(json1.toString());
 	        file.flush();
-	        file.close();
 
 	    } catch (IOException e) {
 	        logger.info("Errore IO!");
@@ -135,7 +133,6 @@ public class TakeInfoProject {
 	        // Constructs a FileWriter given a file name, using the platform's default charset
 	        file.write(object.toString());
 	        file.flush();
-	        file.close();
 
 	    } catch (IOException e) {
 	        logger.info("Errore IO");
