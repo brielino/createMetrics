@@ -88,9 +88,7 @@ public class CreateFileCsv {
 						    }else {
 						    	datee = (ArrayList<Date>) OperationDate.calcoloDate(indiceRelease,projName);
 						    }
-						    System.out.println(datee.get(0)+" "+datee.get(0));
 					    	ArrayList<Integer> shaCode=(ArrayList<Integer>) takeSha(datee.get(0),datee.get(1),projName);
-					    	System.out.println(shaCode);
 					    	nameRelease1=nameRelease;
 					    	for(j=0; j < c.length();j++) {
 								String[] v=c.getJSONObject(j).getString("path").split("/");
