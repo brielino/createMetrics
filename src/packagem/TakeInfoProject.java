@@ -12,6 +12,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TakeInfoProject {
+	
+	private TakeInfoProject() {
+		throw new UnsupportedOperationException();
+	}
 
 	public static void takeContentClass(String fileUrl,String projectName) throws IOException, JSONException, InterruptedException {
 		String st1="https://api.github.com/repos/apache/";
@@ -29,18 +33,15 @@ public class TakeInfoProject {
 				String currentRelease="";
 				for(int i = 0 ; i < releaseUrl.length() ; i++){
 					if(numberOfRequest==4500) {
-						//System.out.println("Sto Dormendo\n");
 						TimeUnit.HOURS.sleep(1);
 						numberOfRequest=0;
 					}
 					String[] release = releaseUrl.getJSONObject(i).getString("name").toString().split("-");
 					currentRelease=release[1];
 					if(!verificsVersion(currentRelease,projectName).isEmpty()){
-						//System.out.println(currentRelease);
 						JSONObject releaseActual =GetConnection.readJsonFromUrl(releaseUrl.getJSONObject(i).getJSONObject("commit").getString("url"));
 						numberOfRequest++;
 						if(numberOfRequest==4500) {
-							//System.out.println("Sto Dormendo\n");
 							TimeUnit.HOURS.sleep(1);
 							numberOfRequest=0;
 						}
@@ -56,7 +57,6 @@ public class TakeInfoProject {
 								String[] v=files.getJSONObject(j).getString("path").split("/");
 								if(v[v.length-1].contains(".java")) {
 									if(numberOfRequest==4500) {
-										//System.out.println("Sto Dormendo\n");
 										TimeUnit.HOURS.sleep(1);
 										numberOfRequest=0;
 									}
@@ -67,7 +67,6 @@ public class TakeInfoProject {
 									allContent.add(content);
 								}
 					    	}
-					    	//System.out.println(numberOfRequest);
 						}
 					
 					}
@@ -142,7 +141,6 @@ public class TakeInfoProject {
 		String url3 = "&per_page=100";
 		int i=1;
 		for(; ;i++) {
-			//System.out.println("Pagina "+i+"\n");
 			//Scorro le varie pagine
 			JSONArray json = GetConnection.readJsonArrayFromUrl(url1+url2+i+url3);
 			Integer l = json.length();
