@@ -33,11 +33,10 @@ public class OperationDate {
 		versionS++;
 		ArrayList<Date> values= new ArrayList<>();
 		String versionSucc=Integer.toString(versionS);
+		values.add(dataFile);
 		if(takeDataVersion(versionSucc,projectName).equalsIgnoreCase(".")) {
-			values.add(dataFile);
 			values.add(null);
 		}else {
-			values.add(dataFile);
 			values.add(convertData(takeDataVersion(versionSucc,projectName)));
 		}
 		return values;
