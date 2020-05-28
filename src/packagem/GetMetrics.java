@@ -1,4 +1,4 @@
-package packagem;
+ackage packagem;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -215,13 +215,12 @@ public class GetMetrics {
 		Boolean second =false;
 		first=str1.contains(str2+":");
 		second=str2.contains("["+str2+"]");
-		if(first) {
-			return true;
-		}else if(second) {
-			return true;
-		}else {
-			return false;
+		if(Boolean.TRUE.equals(first)) {
+			return first;
+		}else if(Boolean.TRUE.equals(second)) {
+			return second;
 		}
+		return false;
 	}
 	
 	public static List<String> calculateMetrics(String fileName,String version,List<Integer> codicisha,JSONArray json,List<ArrayList<String>> ticketBuggy) throws IOException, JSONException {
