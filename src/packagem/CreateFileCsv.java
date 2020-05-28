@@ -83,7 +83,7 @@ public class CreateFileCsv {
 						JSONArray c=d.getJSONArray("tree");
 					    String[] release = z.getJSONObject(i).getString("name").toString().split("-");
 					    nameRelease=release[1];
-				    	verVersions=TakeInfoProject.verificsVersion(nameRelease,projName);
+				    	verVersions=(ArrayList<String>)TakeInfoProject.verificsVersion(nameRelease,projName);
 					    if(nameRelease.compareTo(nameRelease1)!=0 && !verVersions.isEmpty()) {
 					    	ArrayList<Date> datee =null;
 					    	indiceRelease=verVersions.get(1);
@@ -100,7 +100,7 @@ public class CreateFileCsv {
 									String size=GetMetrics.getSize(line);
 									line = reader.readLine();
 									ArrayList<String> metriche1= new ArrayList<>();
-									metriche1=GetMetrics.calculateMetrics(c.getJSONObject(j).getString("path"),indiceRelease,shaCode,object,fileBuggy);
+									metriche1=(ArrayList<String>) GetMetrics.calculateMetrics(c.getJSONObject(j).getString("path"),indiceRelease,(List<Integer>)shaCode,object,(List<ArrayList<String>>)fileBuggy);
 									fileWriter.append(indiceRelease);
 									fileWriter.append(",");
 									fileWriter.append(c.getJSONObject(j).getString("path"));

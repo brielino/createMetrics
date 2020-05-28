@@ -3,6 +3,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -166,10 +167,10 @@ public class TakeInfoProject {
 	    }
 	}
 	
-	public static ArrayList<String> verificsVersion(String version,String projectName) {
+	public static List<String> verificsVersion(String version,String projectName) {
 		HashMap<String,String> numberVersions= (HashMap<String, String>) GetMetrics.readFileName("C:\\Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo Semestre 1\\ISW2\\Falessi\\20200407 Falessi Deliverable 2 Milestone 1 V2\\GetReleaseInfo\\"+projectName+"VersionInfo.csv");
 		String corrispondenza="";
-		ArrayList<String> verVersion= new ArrayList<>();
+		List<String> verVersion= new ArrayList<>();
 		for (String key : numberVersions.keySet()) {
             String value = numberVersions.get(key);
             if(value.compareTo(version)==0) {

@@ -217,7 +217,7 @@ public class GetMetrics {
 		}
 	}
 	
-	public static ArrayList<String> calculateMetrics(String fileName,String version,ArrayList<Integer> codicisha,JSONArray json,ArrayList<ArrayList<String>> ticketBuggy) throws IOException, JSONException {
+	public static List<String> calculateMetrics(String fileName,String version,List<Integer> codicisha,JSONArray json,List<ArrayList<String>> ticketBuggy) throws IOException, JSONException {
 		int locT=0;
 		int locAdd=0;
 		int maxLocAdd=0;
@@ -227,7 +227,7 @@ public class GetMetrics {
 		int nr=0;
 		String buggy="NO";
 		
-		ArrayList<String> values= new ArrayList<>();
+		List<String> values= new ArrayList<>();
 		for(int i=0; i<codicisha.size(); i++) {
 			JSONArray json1=json.getJSONObject(codicisha.get(i)).getJSONArray(FILES);
 			for(int k=0;k<ticketBuggy.size();k++) {
