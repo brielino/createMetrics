@@ -40,6 +40,7 @@ public static void creazione() throws IOException, JSONException {
                 name = versions.getJSONObject(i).get("name").toString();
              if (versions.getJSONObject(i).has("id"))
                 id = versions.getJSONObject(i).get("id").toString();
+             
              addRelease(versions.getJSONObject(i).get("releaseDate").toString(),name,id);
           }
        }
@@ -56,8 +57,8 @@ public static void creazione() throws IOException, JSONException {
 	 try {
             fileWriter = null;
             String outname = projName + "VersionInfo.csv";
-				    //Name of CSV for output
-				    fileWriter = new FileWriter(outname);
+            //Name of CSV for output
+            fileWriter = new FileWriter(outname);
             fileWriter.append("Index,Version ID,Version Name,Date");
             fileWriter.append("\n");
             numVersions = releases.size();
@@ -91,11 +92,12 @@ public static void creazione() throws IOException, JSONException {
 	   public static void addRelease(String strDate, String name, String id) {
 		      LocalDate date = LocalDate.parse(strDate);
 		      LocalDateTime dateTime = date.atStartOfDay();
-		      if (!releases.contains(dateTime))
+		      if (!releases.contains(dateTime)) {
 		         releases.add(dateTime);
 		         releaseNames.put(dateTime, name);
 		         releaseID.put(dateTime, id);
 		      }
+	   }
    
 	   public static void main(String[] args) throws IOException, JSONException, InterruptedException {
 		   //creazione();
