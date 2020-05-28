@@ -44,16 +44,14 @@ public class GetMetrics {
 	
 	public static int foundVersion(Date data,String projectName) throws IOException {
 		 String csvFile ="C:\\Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo Semestre 1\\ISW2\\Falessi\\20200407 Falessi Deliverable 2 Milestone 1 V2\\GetReleaseInfo\\"+projectName+"VersionInfo.csv";
-	     BufferedReader br = null;
 	     String line = "";
 	     String cvsSplitBy = ",";
 	     Integer salta=0;
 	     int numVersions=0;
 	     Date versionData=null;
 	     Logger logger = Logger.getAnonymousLogger();
-	     try {
+	     try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 
-	         br = new BufferedReader(new FileReader(csvFile));
 	         while ((line = br.readLine()) != null) {
 
 	             // use comma as separator
@@ -74,10 +72,6 @@ public class GetMetrics {
 	         logger.info("File non trovato");
 	     } catch (IOException e) {
 	         logger.info("Errore IO");
-	     } finally {
-	    	 if(br!=null) {
-		         br.close();
-	    	 }
 	     }	
 		 return numVersions;
 		
@@ -86,15 +80,13 @@ public class GetMetrics {
 	
 	public static Map<String, String> readFileName(String nameFile) {
 		 String csvFile = nameFile;
-	     BufferedReader br = null;
 	     String line = "";
 	     String cvsSplitBy = ",";
 	     Integer salta=0;
 	     Logger logger = Logger.getAnonymousLogger();
 	     Map<String,String> versionsName= new HashMap<>();
-	     try {
+	     try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 
-	         br = new BufferedReader(new FileReader(csvFile));
 	         while ((line = br.readLine()) != null) {
 
 	             // use comma as separator
@@ -109,14 +101,6 @@ public class GetMetrics {
 	         logger.info("File non trovato");
 	     } catch (IOException e) {
 	         logger.info("Errore IO");
-	     } finally {
-	         if (br != null) {
-	             try {
-	                 br.close();
-	             } catch (IOException e) {
-	                 logger.info("Errore IO 1");
-	             }
-	         }
 	     }
 		return versionsName;
 	}

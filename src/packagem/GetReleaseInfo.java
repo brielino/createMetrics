@@ -53,12 +53,9 @@ public static void creazione() throws IOException, JSONException {
          });
          if (releases.size() < 6)
             return;
-         FileWriter fileWriter = null;
-	 try {
-            fileWriter = null;
-            String outname = projName + "VersionInfo.csv";
+         String outname = projName + "VersionInfo.csv";
+	 try (FileWriter fileWriter = new FileWriter(outname);){
             //Name of CSV for output
-            fileWriter = new FileWriter(outname);
             fileWriter.append("Index,Version ID,Version Name,Date");
             fileWriter.append("\n");
             numVersions = releases.size();
@@ -73,20 +70,12 @@ public static void creazione() throws IOException, JSONException {
                fileWriter.append(releases.get(i).toString());
                fileWriter.append("\n");
             }
+            fileWriter.flush();
 
          } catch (Exception e) {
             logger.info("Error in csv writer");
-         } finally {
-            try {
-            	if(fileWriter!=null) {
-            		fileWriter.flush();
-                    fileWriter.close();
-            	}
-            } catch (IOException e) {
-               logger.info("Error while flushing/closing fileWriter !!!");
-		        }
-		     }
-		   }
+         } 
+	}
  
 	
 	   public static void addRelease(String strDate, String name, String id) {
