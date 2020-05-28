@@ -27,6 +27,10 @@ public class GetMetrics {
 	public static final String ADDITIONS="additions";
 	public static final String DELETIONS="deletions";
 	
+	public GetMetrics() {
+		
+	}
+	
 	public static String getSize(String code) {
 		String classe=new String(Base64.getMimeDecoder().decode(code));
 		int size=0;

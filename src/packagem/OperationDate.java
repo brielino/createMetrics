@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class OperationDate {
+	
+	public OperationDate() {
+		
+	}
 
 	public static Date convertData(String dateInString) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");

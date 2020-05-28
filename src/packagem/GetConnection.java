@@ -1,89 +1,102 @@
 package packagem;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
-import org.json.JSONArray;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Logger;
+import java.util.Collections;
+import java.util.Comparator;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONArray;
 
-public class GetConnection {
 
-	public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-		URLConnection uc = takeUrlConnection(url); 
-		InputStreamReader inputStreamReader = null;
-		try {
-			inputStreamReader = new InputStreamReader(uc.getInputStream());
-		    BufferedReader rd = new BufferedReader(inputStreamReader);
-		    return new JSONObject(readAll(rd));
-		} finally {
-		      inputStreamReader.close();
-		}
-		   
-	}
+public class GetReleaseInfo {
 	
-	public static JSONObject readJsonFromUrl1(String url) throws IOException, JSONException {
-		   InputStream is = new URL(url).openStream();
-		   try {
-			   BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-			   String jsonText = readAll(rd);
-			   return new JSONObject(jsonText);
-		   } finally {
-			   is.close();
+	protected static  HashMap<LocalDateTime, String> releaseNames;
+	protected static  HashMap<LocalDateTime, String> releaseID;
+	protected static ArrayList<LocalDateTime> releases;
+	protected static Integer numVersions;
+
+public static void creazione() throws IOException, JSONException {
+	   String projName ="TAJO";
+	   //Fills the arraylist with releases dates and orders them
+	   //Ignores releases with missing dates
+	   Logger logger = Logger.getAnonymousLogger();
+	   releases = new ArrayList<>();
+       Integer i;
+       String url = "https://issues.apache.org/jira/rest/api/2/project/" + projName;
+       JSONObject json = GetConnection.readJsonFromUrl1(url);
+       JSONArray versions = json.getJSONArray("versions");
+       releaseNames = new HashMap<>();
+       releaseID = new HashMap<> ();
+       for (i = 0; i < versions.length(); i++ ) {
+          String name = "";
+          String id = "";
+          if(versions.getJSONObject(i).has("releaseDate")) {
+             if (versions.getJSONObject(i).has("name"))
+                name = versions.getJSONObject(i).get("name").toString();
+             if (versions.getJSONObject(i).has("id"))
+                id = versions.getJSONObject(i).get("id").toString();
+             addRelease(versions.getJSONObject(i).get("releaseDate").toString(),name,id);
+          }
+       }
+       // order releases by date
+       Collections.sort(releases, new Comparator<LocalDateTime>(){
+       //@Override
+       public int compare(LocalDateTime o1, LocalDateTime o2) {
+                return o1.compareTo(o2);
+            }
+         });
+         if (releases.size() < 6)
+            return;
+         FileWriter fileWriter = null;
+	 try {
+            fileWriter = null;
+            String outname = projName + "VersionInfo.csv";
+				    //Name of CSV for output
+				    fileWriter = new FileWriter(outname);
+            fileWriter.append("Index,Version ID,Version Name,Date");
+            fileWriter.append("\n");
+            numVersions = releases.size();
+            for ( i = 0; i < releases.size(); i++) {
+               Integer index = i + 1;
+               fileWriter.append(index.toString());
+               fileWriter.append(",");
+               fileWriter.append(releaseID.get(releases.get(i)));
+               fileWriter.append(",");
+               fileWriter.append(releaseNames.get(releases.get(i)));
+               fileWriter.append(",");
+               fileWriter.append(releases.get(i).toString());
+               fileWriter.append("\n");
+            }
+
+         } catch (Exception e) {
+            logger.info("Error in csv writer");
+         } finally {
+            try {
+               fileWriter.flush();
+               fileWriter.close();
+            } catch (IOException e) {
+               logger.info("Error while flushing/closing fileWriter !!!");
+		        }
+		     }
 		   }
-	}
+ 
 	
-	private static String readAll(Reader rd) throws IOException {
-	      StringBuilder sb = new StringBuilder();
-	      int cp;
-	      while ((cp = rd.read()) != -1) {
-	         sb.append((char) cp);
-	      }
-	      return sb.toString();
-	}
-	public static JSONArray readJsonArrayFromUrl(String url) throws IOException, JSONException {
-	    InputStream is = new URL(url).openStream();
-	    try {
-	       BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-	       String jsonText = readAll(rd);
-	       return new JSONArray(jsonText);
-	     } finally {
-	       is.close();
-	     }
-	}
-	public static JSONArray readJsonArrayFromUrl1(String url) throws IOException, JSONException {
-		//Utilizzato per fare richieste autenticate che permette di fare 5000 richieste l'ora
-        URLConnection uc = takeUrlConnection(url);
-
-		InputStreamReader inputStreamReader = null;
-		try {
-			inputStreamReader = new InputStreamReader(uc.getInputStream());
-		    BufferedReader rd = new BufferedReader(inputStreamReader);
-		    return new JSONArray(readAll(rd));
-		} finally {
-		      inputStreamReader.close();
-		}
-		   
-	}
-	public static URLConnection takeUrlConnection(String url) throws IOException {
-		URL url1 = new URL(url);
-        URLConnection uc = url1.openConnection();
-        uc.setRequestProperty("X-Requested-With", "Curl");
-        String username =  "Brielino";
-        BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\gabri\\OneDrive\\Desktop\\Token richieste autorizzate GitHub.txt"));
-        String line = reader.readLine();
-        String token =  line;
-        String userpass = username + ":" + token;
-        byte[] encodedBytes = Base64.getEncoder().encode(userpass.getBytes());
-        String basicAuth = "Basic " + new String(encodedBytes);
-        uc.setRequestProperty("Authorization", basicAuth);
-        return uc;
-	}
+	   public static void addRelease(String strDate, String name, String id) {
+		      LocalDate date = LocalDate.parse(strDate);
+		      LocalDateTime dateTime = date.atStartOfDay();
+		      if (!releases.contains(dateTime))
+		         releases.add(dateTime);
+		         releaseNames.put(dateTime, name);
+		         releaseID.put(dateTime, id);
+		      }
+   
+	   public static void main(String[] args) throws IOException, JSONException, InterruptedException {
+		   //creazione();
+		   CreateFileCsv.main(null);
+	   }
 }
