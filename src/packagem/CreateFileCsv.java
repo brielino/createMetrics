@@ -26,14 +26,15 @@ public class CreateFileCsv {
 	    JSONArray object = new JSONArray(token);
 		ArrayList<Integer> arraySha= new ArrayList<>();
 		for(int i=0;i<object.length() ;i++) {
+			String data3=object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date");
 			if(data1==null) {
-				if(OperationDate.convertData(object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date")).after(data)){
+				if(OperationDate.convertData(data3).after(data)){
 					arraySha.add(i);
 				}else {
 					return arraySha;
 				}
-			}else if(OperationDate.convertData(object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date")).after(data)) {
-					if(OperationDate.convertData(object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date")).before(data1)) {
+			}else if(OperationDate.convertData(data3).after(data)) {
+					if(OperationDate.convertData(data3).before(data1)) {
 						arraySha.add(i);
 					}
 			}else {
