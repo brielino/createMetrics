@@ -28,7 +28,9 @@ public class GetConnection {
 		    BufferedReader rd = new BufferedReader(inputStreamReader);
 		    return new JSONObject(readAll(rd));
 		} finally {
-		      inputStreamReader.close();
+			if(inputStreamReader!=null) {
+				inputStreamReader.close();
+			}
 		}
 		   
 	}
@@ -66,13 +68,15 @@ public class GetConnection {
 		//Utilizzato per fare richieste autenticate che permette di fare 5000 richieste l'ora
         URLConnection uc = takeUrlConnection(url);
 
-		InputStreamReader inputStreamReader = null;
+		InputStreamReader inputStreamReader = null ;
 		try {
 			inputStreamReader = new InputStreamReader(uc.getInputStream());
 		    BufferedReader rd = new BufferedReader(inputStreamReader);
 		    return new JSONArray(readAll(rd));
 		} finally {
-		      inputStreamReader.close();
+			if(inputStreamReader!=null) {
+				inputStreamReader.close();
+			}
 		}
 		   
 	}
@@ -81,13 +85,14 @@ public class GetConnection {
         URLConnection uc = url1.openConnection();
         uc.setRequestProperty("X-Requested-With", "Curl");
         String username =  "Brielino";
-        BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\gabri\\OneDrive\\Desktop\\Token richieste autorizzate GitHub.txt"));
-        String line = reader.readLine();
-        String token =  line;
-        String userpass = username + ":" + token;
-        byte[] encodedBytes = Base64.getEncoder().encode(userpass.getBytes());
-        String basicAuth = "Basic " + new String(encodedBytes);
-        uc.setRequestProperty("Authorization", basicAuth);
-        return uc;
+        try(BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\gabri\\OneDrive\\Desktop\\Token richieste autorizzate GitHub.txt"))){
+        	String line = reader.readLine();
+            String token =  line;
+            String userpass = username + ":" + token;
+            byte[] encodedBytes = Base64.getEncoder().encode(userpass.getBytes());
+            String basicAuth = "Basic " + new String(encodedBytes);
+            uc.setRequestProperty("Authorization", basicAuth);
+            return uc;
+        }
 	}
 }
