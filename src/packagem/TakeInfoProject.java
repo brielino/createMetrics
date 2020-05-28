@@ -89,8 +89,10 @@ public class TakeInfoProject {
 	        logger.info("Errore IO!");
 
 	    } finally {
-	    	file.flush();
-	        file.close();
+	    	if(file!=null) {
+		    	file.flush();
+		        file.close();
+	    	}
 	    }
 	}
 	
@@ -125,8 +127,10 @@ public class TakeInfoProject {
 	        logger.info("Errore IO!");
 
 	    } finally {
-	    	file.flush();
-	        file.close();
+	    	if(file!=null) {
+		    	file.flush();
+		        file.close();
+	    	}
 	    }
 	}
 	
@@ -162,8 +166,10 @@ public class TakeInfoProject {
 	        logger.info("Errore IO");
 
 	    } finally {
-	    	file.flush();
-	        file.close();
+	    	if(file!=null) {
+		    	file.flush();
+		        file.close();
+	    	}
 	    }
 	}
 	

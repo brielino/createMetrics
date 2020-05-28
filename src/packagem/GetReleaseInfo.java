@@ -77,8 +77,10 @@ public static void creazione() throws IOException, JSONException {
             logger.info("Error in csv writer");
          } finally {
             try {
-               fileWriter.flush();
-               fileWriter.close();
+            	if(fileWriter!=null) {
+            		fileWriter.flush();
+                    fileWriter.close();
+            	}
             } catch (IOException e) {
                logger.info("Error while flushing/closing fileWriter !!!");
 		        }

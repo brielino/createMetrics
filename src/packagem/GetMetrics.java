@@ -75,7 +75,9 @@ public class GetMetrics {
 	     } catch (IOException e) {
 	         logger.info("Errore IO");
 	     } finally {
-	         br.close();
+	    	 if(br!=null) {
+		         br.close();
+	    	 }
 	     }	
 		 return numVersions;
 		
