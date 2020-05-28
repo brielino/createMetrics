@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -162,12 +163,12 @@ public class TakeInfoProject {
 		HashMap<String,String> numberVersions= (HashMap<String, String>) GetMetrics.readFileName("C:\\Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo Semestre 1\\ISW2\\Falessi\\20200407 Falessi Deliverable 2 Milestone 1 V2\\GetReleaseInfo\\"+projectName+"VersionInfo.csv");
 		String corrispondenza="";
 		List<String> verVersion= new ArrayList<>();
-		for (String key : numberVersions.keySet()) {
-            String value = numberVersions.get(key);
+		for (Entry<String, String> key : numberVersions.entrySet()) {
+            String value = key.getValue();
             if(value.compareTo(version)==0) {
             	corrispondenza= ".";
             	verVersion.add(corrispondenza);
-            	verVersion.add(key);
+            	verVersion.add(key.getKey());
             	break;
             }
         }
