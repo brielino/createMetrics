@@ -215,7 +215,9 @@ public class GetMetrics {
 		Boolean second =false;
 		first=str1.contains(str2+":");
 		second=str2.contains("["+str2+"]");
-		if(first || second) {
+		if(first) {
+			return true;
+		}else if(second) {
 			return true;
 		}else {
 			return false;
