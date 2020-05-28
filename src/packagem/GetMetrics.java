@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.json.JSONArray;
@@ -132,12 +133,7 @@ public class GetMetrics {
 	    					break;
 	    				}
 	    				nameReleaseFv = object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(FIXVERSIONS).getJSONObject(0).getString("name").toString();
-	    			    for (String key : numberVersions.keySet()) {
-	    		            String value = numberVersions.get(key);
-	    		            if(value.compareTo(nameReleaseFv)==0) {
-	    		            	fv=Integer.parseInt(key);
-	    		            }
-	    			    }
+	    			    fv=calculateFvIv(nameReleaseFv,projectName);
 	    			    iv=fv-(fv-ov)*p;
 	    			    if(ov>=iv && ov<fv) {
 	    			    	ArrayList<String> riferimento=new ArrayList<>();
@@ -159,15 +155,8 @@ public class GetMetrics {
 	    				nameReleaseOv = object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date");
 	    				Date dataOv = OperationDate.convertData(nameReleaseOv);
 	    				ov=foundVersion(dataOv,projectName);
-	    				for (String key : numberVersions.keySet()) {
-	    		            String value = numberVersions.get(key);
-	    		            if(value.compareTo(nameReleaseIv)==0) {
-	    		            	iv=Integer.parseInt(key);
-	    		            }
-	    		            if(value.compareTo(nameReleaseFv)==0) {
-	    		            	fv=Integer.parseInt(key);
-	    		            }
-	    			    }
+	    			    fv=calculateFvIv(nameReleaseFv,projectName);
+	    			    iv=calculateFvIv(nameReleaseIv,projectName);
 	    				
     					if((fv-ov)==0) {
 	    		        	p=1;
@@ -175,11 +164,11 @@ public class GetMetrics {
 	    		        	p=(fv-iv)/(fv-ov);
 	    		        }
 	    				for(int z = 0;z<object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).length();z++) {
-	    					for (String key : numberVersions.keySet()) {
-		    		            String value = numberVersions.get(key);
+	    					for (Entry<String, String> key : numberVersions.entrySet()) {
+		    		            String value = key.getValue();
 		    		            String nomeav=object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).getJSONObject(z).getString("name");
 		    		            if(value.compareTo(nomeav)==0) {
-		    		            	iv=Integer.parseInt(key);
+		    		            	iv=Integer.parseInt(key.getKey());
 		    		            	ArrayList<String> riferimento=new ArrayList<>();
 			    			    	riferimento.add(Integer.toString(iv));
 			    			    	riferimento.add(object1.getJSONObject(k).get("key").toString());
@@ -260,6 +249,22 @@ public class GetMetrics {
 		return values;
 
 	}
+	
+	public static int calculateFvIv(String fv,String projectName){
+		HashMap<String,String> numberVersions= (HashMap<String, String>) GetMetrics.readFileName("C:\\Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo Semestre 1\\ISW2\\Falessi\\20200407 Falessi Deliverable 2 Milestone 1 V2\\GetReleaseInfo\\"+projectName+"VersionInfo.csv");
+		int v = 0;
+		for (Entry<String, String> key : numberVersions.entrySet()) {
+            String value = key.getValue();
+            if(value.compareTo(fv)==0) {
+            	v=Integer.parseInt(key.getKey());
+            	break;
+            }
+	    }
+		return v;
+	}
+	
+
+	
 	public static List<ArrayList<String>> foundClassBuggy(List<ArrayList<String>> ticketBuggy,JSONArray object) throws JSONException{
 		Boolean prima;
 	    List<ArrayList<String>> fileBuggy= new ArrayList<>();
