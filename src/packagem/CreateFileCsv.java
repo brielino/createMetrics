@@ -27,13 +27,14 @@ public class CreateFileCsv {
 		ArrayList<Integer> arraySha= new ArrayList<>();
 		for(int i=0;i<object.length() ;i++) {
 			String data3=object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date");
+			Boolean confrontodata=OperationDate.convertData(data3).after(data);
 			if(data1==null) {
-				if(OperationDate.convertData(data3).after(data)){
+				if(confrontodata){
 					arraySha.add(i);
 				}else {
 					return arraySha;
 				}
-			}else if(OperationDate.convertData(data3).after(data)) {
+			}else if(confrontodata) {
 					if(OperationDate.convertData(data3).before(data1)) {
 						arraySha.add(i);
 					}
