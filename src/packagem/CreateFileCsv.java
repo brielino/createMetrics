@@ -138,7 +138,8 @@ public class CreateFileCsv {
 		    	logger.info("Errore");
 		    }
 		}finally {
-			
+			Logger logger = Logger.getAnonymousLogger();
+			logger.info("finish");
 		}
 }
 }
