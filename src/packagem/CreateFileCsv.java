@@ -27,14 +27,13 @@ public class CreateFileCsv {
 		ArrayList<Integer> arraySha= new ArrayList<>();
 		for(int i=0;i<object.length() ;i++) {
 			String data3=object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date");
-			Boolean confrontodata=OperationDate.convertData(data3).after(data);
 			if(data1==null) {
-				if(confrontodata){
+				if(OperationDate.convertData(data3).after(data)){
 					arraySha.add(i);
 				}else {
 					return arraySha;
 				}
-			}else if(confrontodata) {
+			}else if(OperationDate.convertData(data3).after(data)) {
 					if(OperationDate.convertData(data3).before(data1)) {
 						arraySha.add(i);
 					}
@@ -84,7 +83,7 @@ public class CreateFileCsv {
 	
 	public static void main(String[] args) throws IOException, JSONException, InterruptedException {
 
-		String projName ="BOOKKEEPER";
+		String projName ="TAJO";
 		ArrayList<ArrayList<String>> ticketBuggy=(ArrayList<ArrayList<String>>) GetMetrics.foundBuggy(projName);
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);

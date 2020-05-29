@@ -4,8 +4,6 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
-import java.util.Collections;
-import java.util.Comparator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.json.JSONException;
@@ -44,17 +42,14 @@ public static void creazione() throws IOException, JSONException {
              addRelease(versions.getJSONObject(i).get("releaseDate").toString(),name,id);
           }
        }
+       
        // order releases by date
-       Collections.sort(releases, new Comparator<LocalDateTime>(){
-       //@Override
-       public int compare(LocalDateTime o1, LocalDateTime o2) {
-                return o1.compareTo(o2);
-            }
-         });
-         if (releases.size() < 6)
+       releases.sort(null);
+       if (releases.size() < 6)
             return;
-         String outname = projName + "VersionInfo.csv";
-	 try (FileWriter fileWriter = new FileWriter(outname);){
+       String outname = projName + "VersionInfo.csv";
+	 
+       try (FileWriter fileWriter = new FileWriter(outname);){
             //Name of CSV for output
             fileWriter.append("Index,Version ID,Version Name,Date");
             fileWriter.append("\n");
