@@ -91,51 +91,54 @@ public class CreateFileCsv {
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
 	    ArrayList<ArrayList<String>> fileBuggy= (ArrayList<ArrayList<String>>) GetMetrics.foundClassBuggy((List<ArrayList<String>>)ticketBuggy,object);
-		BufferedReader reader = new BufferedReader(new FileReader(PERCORSO+projName+"Content.txt"));
-		String line =reader.readLine();
-		ArrayList<String> verVersions= new ArrayList<>();
-		Logger logger = Logger.getAnonymousLogger();
-		String filePath=PERCORSO+"Metriche"+projName+".csv";
-		try(FileWriter fileWriter = new FileWriter(filePath)){
-			fileWriter.append("Versione,FileName,LOC_touched,LOC_added,MAX_LOC_Added,AVG_LOC_Added,Churn,MAX_Churn,AVG_Churn,Size,NR,Buggy\n");
-			String st1="https://api.github.com/repos/apache/";
-			String st2="/tags";
-			String st3="?page=";
-			int i=0;
-			int t=1;
-			String nameRelease="";
-			String nameRelease1="";
-			String indiceRelease="";
-			for(;;t++) {
-			    JSONArray z =GetConnection.readJsonArrayFromUrl1(st1+projName+st2+st3+t);
-				if(z.length()!=0) {
-					for(i=0 ; i < z.length() ; i++){
-				
-						JSONObject f =GetConnection.readJsonFromUrl(z.getJSONObject(i).getJSONObject(COMMIT).getString("url"));
-						JSONObject d =GetConnection.readJsonFromUrl(f.getJSONObject(COMMIT).getJSONObject("tree").getString("url")+"?recursive=1");
-						JSONArray c=d.getJSONArray("tree");
-					    String[] release = z.getJSONObject(i).getString("name").toString().split("-");
-					    nameRelease=release[1];
-				    	verVersions=(ArrayList<String>)TakeInfoProject.verificsVersion(nameRelease,projName);
-					    if(nameRelease.compareTo(nameRelease1)!=0 && !verVersions.isEmpty()) {
-					    	ArrayList<Date> datee =null;
-					    	indiceRelease=verVersions.get(1);
-					    	datee = (ArrayList<Date>) OperationDate.calcoloDate(indiceRelease,projName);
-					    	ArrayList<Integer> shaCode=(ArrayList<Integer>) takeSha(datee.get(0),datee.get(1),projName);
-					    	nameRelease1=nameRelease;
-					    	ArrayList<String> s=new ArrayList<>();
-					    	s.add(indiceRelease);
-					    	s.add(line);
-					    	writeFile(fileWriter,s,reader,c,object,fileBuggy,shaCode);
-					    }
-					    }
-				}else {
-					fileWriter.flush();
-					break;
+		try(BufferedReader reader = new BufferedReader(new FileReader(PERCORSO+projName+"Content.txt"))){
+			String line =reader.readLine();
+			ArrayList<String> verVersions= new ArrayList<>();
+			Logger logger = Logger.getAnonymousLogger();
+			String filePath=PERCORSO+"Metriche"+projName+".csv";
+			try(FileWriter fileWriter = new FileWriter(filePath)){
+				fileWriter.append("Versione,FileName,LOC_touched,LOC_added,MAX_LOC_Added,AVG_LOC_Added,Churn,MAX_Churn,AVG_Churn,Size,NR,Buggy\n");
+				String st1="https://api.github.com/repos/apache/";
+				String st2="/tags";
+				String st3="?page=";
+				int i=0;
+				int t=1;
+				String nameRelease="";
+				String nameRelease1="";
+				String indiceRelease="";
+				for(;;t++) {
+				    JSONArray z =GetConnection.readJsonArrayFromUrl1(st1+projName+st2+st3+t);
+					if(z.length()!=0) {
+						for(i=0 ; i < z.length() ; i++){
+					
+							JSONObject f =GetConnection.readJsonFromUrl(z.getJSONObject(i).getJSONObject(COMMIT).getString("url"));
+							JSONObject d =GetConnection.readJsonFromUrl(f.getJSONObject(COMMIT).getJSONObject("tree").getString("url")+"?recursive=1");
+							JSONArray c=d.getJSONArray("tree");
+						    String[] release = z.getJSONObject(i).getString("name").toString().split("-");
+						    nameRelease=release[1];
+					    	verVersions=(ArrayList<String>)TakeInfoProject.verificsVersion(nameRelease,projName);
+						    if(nameRelease.compareTo(nameRelease1)!=0 && !verVersions.isEmpty()) {
+						    	ArrayList<Date> datee =null;
+						    	indiceRelease=verVersions.get(1);
+						    	datee = (ArrayList<Date>) OperationDate.calcoloDate(indiceRelease,projName);
+						    	ArrayList<Integer> shaCode=(ArrayList<Integer>) takeSha(datee.get(0),datee.get(1),projName);
+						    	nameRelease1=nameRelease;
+						    	ArrayList<String> s=new ArrayList<>();
+						    	s.add(indiceRelease);
+						    	s.add(line);
+						    	writeFile(fileWriter,s,reader,c,object,fileBuggy,shaCode);
+						    }
+						    }
+					}else {
+						fileWriter.flush();
+						break;
+					}
 				}
-			}
-	    }catch (IOException e) {
-	    	logger.info("Errore");
-	    }
-	}
+		    }catch (IOException e) {
+		    	logger.info("Errore");
+		    }
+		}finally {
+			
+		}
+}
 }
