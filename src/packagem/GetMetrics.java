@@ -27,8 +27,8 @@ public class GetMetrics {
 	public static final String FILES="files";
 	public static final String ADDITIONS="additions";
 	public static final String DELETIONS="deletions";
-	public static final String PATH1="C:\\";
-	public static final String PATH2="Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo";
+	public static final String PATH1="C:";
+	public static final String PATH2="\\Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo";
 	public static final String PATH3=" Semestre 1\\ISW2\\Falessi\\20200407 Falessi Deliverable 2 Milestone 1 V2\\GetReleaseInfo\\";
 	public static final String INFO="VersionInfo.csv";
 	
@@ -205,7 +205,7 @@ public class GetMetrics {
 		int locAdd=0;
 		int maxLocAdd=0;
 		int churn=0;
-		int maxChurn=0;
+		int maxChurn=-9999999;
 		int count=0;
 		int nr=0;
 		String buggy="NO";
@@ -246,6 +246,11 @@ public class GetMetrics {
 		}
 		values.add(Float.toString((float)locAdd/count));
 		values.add(Integer.toString(churn));
+		if(nr!=0) {
+			values.add(Integer.toString(maxChurn));
+		}else {
+			values.add("0");
+		}
 		values.add(Integer.toString(maxChurn));
 		values.add(Float.toString((float)churn/count));
 		values.add(Integer.toString(nr));

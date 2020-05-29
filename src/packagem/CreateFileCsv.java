@@ -44,15 +44,14 @@ public class CreateFileCsv {
 		return arraySha;
 	}
 
-	public static void writeFile(FileWriter fileWriter,ArrayList<String> indiceRelease,BufferedReader reader,JSONArray c,JSONArray object,ArrayList<ArrayList<String>>fileBuggy,ArrayList<Integer>shaCode) throws JSONException, IOException {
+	public static void writeFile(FileWriter fileWriter,List<String> indiceRelease,BufferedReader reader,JSONArray c,JSONArray object,List<ArrayList<String>>fileBuggy,List<Integer>shaCode) throws JSONException, IOException {
 		String line =indiceRelease.get(1);
 		for(int j = 0; j < c.length();j++) {
 			String[] v=c.getJSONObject(j).getString("path").split("/");
 			if(v[v.length-1].contains(".java")) {
 				String size=GetMetrics.getSize(line);
 				line = reader.readLine();
-				ArrayList<String> metriche1= new ArrayList<>();
-				metriche1=(ArrayList<String>) GetMetrics.calculateMetrics(c.getJSONObject(j).getString("path"),indiceRelease.get(0),(List<Integer>)shaCode,object,(List<ArrayList<String>>)fileBuggy);
+				ArrayList<String> metriche1=(ArrayList<String>) GetMetrics.calculateMetrics(c.getJSONObject(j).getString("path"),indiceRelease.get(0),(List<Integer>)shaCode,object,(List<ArrayList<String>>)fileBuggy);
 				fileWriter.append(indiceRelease.get(0));
 				fileWriter.append(",");
 				fileWriter.append(c.getJSONObject(j).getString("path"));
@@ -84,7 +83,7 @@ public class CreateFileCsv {
 	
 	public static void main(String[] args) throws IOException, JSONException, InterruptedException {
 
-		String projName ="TAJO";
+		String projName ="BOOKKEEPER";
 		ArrayList<ArrayList<String>> ticketBuggy=(ArrayList<ArrayList<String>>) GetMetrics.foundBuggy(projName);
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
