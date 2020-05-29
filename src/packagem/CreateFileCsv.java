@@ -38,8 +38,10 @@ public class CreateFileCsv {
 			String data3=object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date");
 			if(data1==null) {
 				arraySha.addAll(subTakeSha(i,data3,data));
-			}else if(OperationDate.convertData(data3).before(data1)) {	
-				arraySha.addAll(subTakeSha(i,data3,data));
+			}else {
+				if(OperationDate.convertData(data3).before(data1)) {
+					arraySha.addAll(subTakeSha(i,data3,data));
+				}
 			}
 		}
 		return arraySha;
