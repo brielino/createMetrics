@@ -18,6 +18,24 @@ public class TakeInfoProject {
 		throw new UnsupportedOperationException();
 	}
 
+	public static List<String> subTakeContentClass(String[] nameRelease1,String nameRelease,int[] numberOfRequest,JSONArray files) throws InterruptedException, JSONException, IOException {
+		ArrayList<String> allContent = new ArrayList<>();
+		if(nameRelease1[0].compareTo(nameRelease)!=0) {
+			nameRelease1[0]=nameRelease;
+	    	for(int j = 0; j < files.length();j++) {
+				String[] v=files.getJSONObject(j).getString("path").split("/");
+				if(v[v.length-1].contains(".java")) {
+					numberOfRequest[0]=sleep(numberOfRequest[0])+1;
+					JSONObject sizeUrl=GetConnection.readJsonFromUrl(files.getJSONObject(j).getString("url"));
+					String content=sizeUrl.getString("content");
+					content = content.replaceAll("\r\n|\r|\n","");
+					allContent.add(content);
+				}
+	    	}
+		}
+		return allContent;
+		
+	}
 	public static void takeContentClass(String fileUrl,String projectName) throws IOException, JSONException, InterruptedException {
 		String st1="https://api.github.com/repos/apache/";
 		String st2="/tags";
@@ -28,33 +46,22 @@ public class TakeInfoProject {
 			JSONArray releaseUrl= GetConnection.readJsonArrayFromUrl1(st1+projectName+st2+st3+t);
 			if(releaseUrl.length()!=0) {
 				String nameRelease="";
-				String nameRelease1="";
-				int numberOfRequest=1;
+				String[] nameRelease1=new String[1];
+				nameRelease1[1]="";
+				int[] numberOfRequest=new int[1];
+				numberOfRequest[0]=1;
 				String currentRelease="";
 				for(int i = 0 ; i < releaseUrl.length() ; i++){
 					String[] release = releaseUrl.getJSONObject(i).getString("name").toString().split("-");
 					currentRelease=release[1];
 					if(!verificsVersion(currentRelease,projectName).isEmpty()){
 						JSONObject releaseActual =GetConnection.readJsonFromUrl(releaseUrl.getJSONObject(i).getJSONObject("commit").getString("url"));
-						numberOfRequest=sleep(numberOfRequest)+2;
+						numberOfRequest[0]=sleep(numberOfRequest[0])+2;
 						JSONObject filesF =GetConnection.readJsonFromUrl(releaseActual.getJSONObject("commit").getJSONObject("tree").getString("url")+"?recursive=1");
 						JSONArray files=filesF.getJSONArray("tree");
 						String[] releaseN = releaseUrl.getJSONObject(i).getString("name").toString().split("-");
-					    nameRelease1=releaseN[1];
-					
-						if(nameRelease1.compareTo(nameRelease)!=0) {
-							nameRelease1=nameRelease;
-					    	for(int j = 0; j < files.length();j++) {
-								String[] v=files.getJSONObject(j).getString("path").split("/");
-								if(v[v.length-1].contains(".java")) {
-									numberOfRequest=sleep(numberOfRequest)+1;
-									JSONObject sizeUrl=GetConnection.readJsonFromUrl(files.getJSONObject(j).getString("url"));
-									String content=sizeUrl.getString("content");
-									content = content.replaceAll("\r\n|\r|\n","");
-									allContent.add(content);
-								}
-					    	}
-						}
+					    nameRelease1[0]=releaseN[1];
+					    allContent.addAll(subTakeContentClass(nameRelease1,nameRelease,numberOfRequest,files));
 					
 					}
 				}
