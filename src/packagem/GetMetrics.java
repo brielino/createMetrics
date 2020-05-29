@@ -27,8 +27,9 @@ public class GetMetrics {
 	public static final String FILES="files";
 	public static final String ADDITIONS="additions";
 	public static final String DELETIONS="deletions";
-	public static final String PATH1="C:\\Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo";
-	public static final String PATH2=" Semestre 1\\ISW2\\Falessi\\20200407 Falessi Deliverable 2 Milestone 1 V2\\GetReleaseInfo\\";
+	public static final String PATH1="C:\\";
+	public static final String PATH2="Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo";
+	public static final String PATH3=" Semestre 1\\ISW2\\Falessi\\20200407 Falessi Deliverable 2 Milestone 1 V2\\GetReleaseInfo\\";
 	public static final String INFO="VersionInfo.csv";
 	
 	private GetMetrics() {
@@ -47,7 +48,7 @@ public class GetMetrics {
 	}
 	
 	public static int foundVersion(Date data,String projectName) throws IOException {
-		 String csvFile =PATH1+PATH2+projectName+INFO;
+		 String csvFile =PATH1+PATH2+PATH3+projectName+INFO;
 	     String line = "";
 	     String cvsSplitBy = ",";
 	     Integer salta=0;
@@ -120,7 +121,7 @@ public class GetMetrics {
 		int fv=0;
 		int iv=0;
 	    Boolean prima;
-		HashMap<String,String> numberVersions= (HashMap<String, String>) readFileName(PATH1+PATH2+projectName+INFO);
+		HashMap<String,String> numberVersions= (HashMap<String, String>) readFileName(PATH1+PATH2+PATH3+projectName+INFO);
 	    String nameReleaseIv="";
 	    String nameReleaseFv="";
 	    String nameReleaseOv="";
@@ -254,7 +255,7 @@ public class GetMetrics {
 	}
 	
 	public static int calculateFvIv(String fv,String projectName){
-		HashMap<String,String> numberVersions= (HashMap<String, String>) GetMetrics.readFileName(PATH1+PATH2+projectName+INFO);
+		HashMap<String,String> numberVersions= (HashMap<String, String>) GetMetrics.readFileName(PATH1+PATH2+PATH3+projectName+INFO);
 		int v = 0;
 		for (Entry<String, String> key : numberVersions.entrySet()) {
             String value = key.getValue();

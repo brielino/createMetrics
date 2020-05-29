@@ -44,16 +44,53 @@ public class CreateFileCsv {
 		return arraySha;
 	}
 
-
+	public static void writeFile(FileWriter fileWriter,ArrayList<String> indiceRelease,BufferedReader reader,JSONArray c,JSONArray object,ArrayList<ArrayList<String>>fileBuggy,ArrayList<Integer>shaCode) throws JSONException, IOException {
+		String line =indiceRelease.get(1);
+		for(int j = 0; j < c.length();j++) {
+			String[] v=c.getJSONObject(j).getString("path").split("/");
+			if(v[v.length-1].contains(".java")) {
+				String size=GetMetrics.getSize(line);
+				line = reader.readLine();
+				ArrayList<String> metriche1= new ArrayList<>();
+				metriche1=(ArrayList<String>) GetMetrics.calculateMetrics(c.getJSONObject(j).getString("path"),indiceRelease.get(0),(List<Integer>)shaCode,object,(List<ArrayList<String>>)fileBuggy);
+				fileWriter.append(indiceRelease.get(0));
+				fileWriter.append(",");
+				fileWriter.append(c.getJSONObject(j).getString("path"));
+				fileWriter.append(",");
+				fileWriter.append(metriche1.get(0));
+				fileWriter.append(",");
+				fileWriter.append(metriche1.get(1));
+				fileWriter.append(",");
+				fileWriter.append(metriche1.get(2));
+				fileWriter.append(",");
+				fileWriter.append(metriche1.get(3));
+				fileWriter.append(",");
+				fileWriter.append(metriche1.get(4));
+				fileWriter.append(",");
+				fileWriter.append(metriche1.get(5));
+				fileWriter.append(",");
+				fileWriter.append(metriche1.get(6));
+				fileWriter.append(",");
+				fileWriter.append(size);
+				fileWriter.append(",");
+				fileWriter.append(metriche1.get(7));
+				fileWriter.append(",");
+				fileWriter.append(metriche1.get(8));
+				fileWriter.append("\n");
+				
+			}
+		}
+	}
+	
 	public static void main(String[] args) throws IOException, JSONException, InterruptedException {
 
-		String projName ="BOOKKEEPER";
+		String projName ="TAJO";
 		ArrayList<ArrayList<String>> ticketBuggy=(ArrayList<ArrayList<String>>) GetMetrics.foundBuggy(projName);
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
 	    ArrayList<ArrayList<String>> fileBuggy= (ArrayList<ArrayList<String>>) GetMetrics.foundClassBuggy((List<ArrayList<String>>)ticketBuggy,object);
 		BufferedReader reader = new BufferedReader(new FileReader(PERCORSO+projName+"Content.txt"));
-	    String line = reader.readLine();
+		String line =reader.readLine();
 		ArrayList<String> verVersions= new ArrayList<>();
 		Logger logger = Logger.getAnonymousLogger();
 		String filePath=PERCORSO+"Metriche"+projName+".csv";
@@ -63,7 +100,6 @@ public class CreateFileCsv {
 			String st2="/tags";
 			String st3="?page=";
 			int i=0;
-			int j=0;
 			int t=1;
 			String nameRelease="";
 			String nameRelease1="";
@@ -82,47 +118,13 @@ public class CreateFileCsv {
 					    if(nameRelease.compareTo(nameRelease1)!=0 && !verVersions.isEmpty()) {
 					    	ArrayList<Date> datee =null;
 					    	indiceRelease=verVersions.get(1);
-						    if(indiceRelease.compareTo("")==0){
-						    	datee = (ArrayList<Date>) OperationDate.calcoloDate("1",projName);
-						    }else {
-						    	datee = (ArrayList<Date>) OperationDate.calcoloDate(indiceRelease,projName);
-						    }
+					    	datee = (ArrayList<Date>) OperationDate.calcoloDate(indiceRelease,projName);
 					    	ArrayList<Integer> shaCode=(ArrayList<Integer>) takeSha(datee.get(0),datee.get(1),projName);
 					    	nameRelease1=nameRelease;
-					    	for(j=0; j < c.length();j++) {
-								String[] v=c.getJSONObject(j).getString("path").split("/");
-								if(v[v.length-1].contains(".java")) {
-									String size=GetMetrics.getSize(line);
-									line = reader.readLine();
-									ArrayList<String> metriche1= new ArrayList<>();
-									metriche1=(ArrayList<String>) GetMetrics.calculateMetrics(c.getJSONObject(j).getString("path"),indiceRelease,(List<Integer>)shaCode,object,(List<ArrayList<String>>)fileBuggy);
-									fileWriter.append(indiceRelease);
-									fileWriter.append(",");
-									fileWriter.append(c.getJSONObject(j).getString("path"));
-									fileWriter.append(",");
-									fileWriter.append(metriche1.get(0));
-									fileWriter.append(",");
-									fileWriter.append(metriche1.get(1));
-									fileWriter.append(",");
-									fileWriter.append(metriche1.get(2));
-									fileWriter.append(",");
-									fileWriter.append(metriche1.get(3));
-									fileWriter.append(",");
-									fileWriter.append(metriche1.get(4));
-									fileWriter.append(",");
-									fileWriter.append(metriche1.get(5));
-									fileWriter.append(",");
-									fileWriter.append(metriche1.get(6));
-									fileWriter.append(",");
-									fileWriter.append(size);
-									fileWriter.append(",");
-									fileWriter.append(metriche1.get(7));
-									fileWriter.append(",");
-									fileWriter.append(metriche1.get(8));
-									fileWriter.append("\n");
-									
-								}
-							}
+					    	ArrayList<String> s=new ArrayList<>();
+					    	s.add(indiceRelease);
+					    	s.add(line);
+					    	writeFile(fileWriter,s,reader,c,object,fileBuggy,shaCode);
 					    }
 					    }
 				}else {
