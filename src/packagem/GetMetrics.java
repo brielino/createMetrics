@@ -196,6 +196,36 @@ public class GetMetrics {
 		return false;
 	}
 	
+	public static String subCalculateMetrics(List<ArrayList<String>> ticketBuggy,String version,String fileName) {
+		String buggy="NO";
+		for(int k=0;k<ticketBuggy.size();k++) {
+			if(ticketBuggy.get(k).get(0).compareTo(version)==0 && ticketBuggy.get(k).get(1).compareTo(fileName)==0) {
+				buggy="YES";
+			}
+		}
+		return buggy;
+	}
+	
+	public static List<String> createMetrics(int[] loc,int maxLocAdd,int count,int nr,int churn,int maxChurn,String buggy){
+		List<String> values=new ArrayList<>();
+		values.add(Integer.toString(loc[0]));
+		values.add(Integer.toString(loc[1]));
+		values.add(Integer.toString(maxLocAdd));
+		if(count==0) {
+			count=1;
+		}
+		values.add(Float.toString((float)loc[1]/count));
+		values.add(Integer.toString(churn));
+		if(nr!=0) {
+			values.add(Integer.toString(maxChurn));
+		}else {
+			values.add("0");
+		}
+		values.add(Float.toString((float)churn/count));
+		values.add(Integer.toString(nr));
+		values.add(buggy);
+		return values;
+	}
 	public static List<String> calculateMetrics(String fileName,String version,List<Integer> codicisha,JSONArray json,List<ArrayList<String>> ticketBuggy) throws IOException, JSONException {
 		int locT=0;
 		int locAdd=0;
@@ -209,11 +239,7 @@ public class GetMetrics {
 		List<String> values= new ArrayList<>();
 		for(int i=0; i<codicisha.size(); i++) {
 			JSONArray json1=json.getJSONObject(codicisha.get(i)).getJSONArray(FILES);
-			for(int k=0;k<ticketBuggy.size();k++) {
-				if(ticketBuggy.get(k).get(0).compareTo(version)==0 && ticketBuggy.get(k).get(1).compareTo(fileName)==0) {
-					buggy="YES";
-				}
-			}
+			buggy=subCalculateMetrics(ticketBuggy,version,fileName);
 			for(int j=0; j<json1.length();j++) {
 				if(json1.getJSONObject(j).getString("filename").compareToIgnoreCase(fileName)==0) {
 					if(json1.getJSONObject(j).getInt(ADDITIONS)>maxLocAdd) {
@@ -234,22 +260,10 @@ public class GetMetrics {
 			}
 			
 		}
-		values.add(Integer.toString(locT));
-		values.add(Integer.toString(locAdd));
-		values.add(Integer.toString(maxLocAdd));
-		if(count==0) {
-			count=1;
-		}
-		values.add(Float.toString((float)locAdd/count));
-		values.add(Integer.toString(churn));
-		if(nr!=0) {
-			values.add(Integer.toString(maxChurn));
-		}else {
-			values.add("0");
-		}
-		values.add(Float.toString((float)churn/count));
-		values.add(Integer.toString(nr));
-		values.add(buggy);
+		int[] loc=new int[2];
+		loc[0]=locT;
+		loc[1]=locAdd;
+		values.addAll(createMetrics(loc,maxLocAdd,count,nr,churn,maxChurn,buggy));
 		return values;
 
 	}
