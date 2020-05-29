@@ -30,7 +30,22 @@ public class CreateFileCsv {
 		return arraySha;
 	}
 	
-
+	public static List<Integer> takeSha(Date data,Date data1,String projectName) throws IOException, JSONException {
+		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projectName+"Commit.json")));
+	    JSONArray object = new JSONArray(token);
+		ArrayList<Integer> arraySha= new ArrayList<>();
+		for(int i=0;i<object.length() ;i++) {
+			String data3=object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date");
+			if(data1==null) {
+				arraySha.addAll(subTakeSha(i,data3,data));
+			}else {
+				if(OperationDate.convertData(data3).before(data1)) {
+					arraySha.addAll(subTakeSha(i,data3,data));
+				}
+			}
+		}
+		return arraySha;
+	}
 
 	public static void writeFile(FileWriter fileWriter,List<String> indiceRelease,BufferedReader reader,JSONArray c,JSONArray object,List<ArrayList<String>>fileBuggy,List<Integer>shaCode) throws JSONException, IOException {
 		String line =indiceRelease.get(1);
@@ -44,25 +59,12 @@ public class CreateFileCsv {
 				fileWriter.append(",");
 				fileWriter.append(c.getJSONObject(j).getString("path"));
 				fileWriter.append(",");
-				fileWriter.append(metriche1.get(0));
-				fileWriter.append(",");
-				fileWriter.append(metriche1.get(1));
-				fileWriter.append(",");
-				fileWriter.append(metriche1.get(2));
-				fileWriter.append(",");
-				fileWriter.append(metriche1.get(3));
-				fileWriter.append(",");
-				fileWriter.append(metriche1.get(4));
-				fileWriter.append(",");
-				fileWriter.append(metriche1.get(5));
-				fileWriter.append(",");
-				fileWriter.append(metriche1.get(6));
-				fileWriter.append(",");
 				fileWriter.append(size);
 				fileWriter.append(",");
-				fileWriter.append(metriche1.get(7));
-				fileWriter.append(",");
-				fileWriter.append(metriche1.get(8));
+				for(int i=0;i<metriche1.size();i++) {
+					fileWriter.append(metriche1.get(i));
+					fileWriter.append(",");
+				}
 				fileWriter.append("\n");
 				
 			}
@@ -82,7 +84,7 @@ public class CreateFileCsv {
 			Logger logger = Logger.getAnonymousLogger();
 			String filePath=PERCORSO+"Metriche"+projName+".csv";
 			try(FileWriter fileWriter = new FileWriter(filePath)){
-				fileWriter.append("Versione,FileName,LOC_touched,LOC_added,MAX_LOC_Added,AVG_LOC_Added,Churn,MAX_Churn,AVG_Churn,Size,NR,Buggy\n");
+				fileWriter.append("Versione,FileName,Size,LOC_touched,LOC_added,MAX_LOC_Added,AVG_LOC_Added,Churn,MAX_Churn,AVG_Churn,NR,Buggy\n");
 				String st1="https://api.github.com/repos/apache/";
 				String st2="/tags";
 				String st3="?page=";
