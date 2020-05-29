@@ -135,6 +135,24 @@ public class GetMetrics {
 		return ticket;
 	}
 	
+	public static List<ArrayList<String>> haveAv(int k,JSONArray object1,HashMap<String,String> numberVersions) throws NumberFormatException, JSONException{
+		List<ArrayList<String>> ticket=new ArrayList<>();
+		for(int z = 0;z<object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).length();z++) {
+			for (Entry<String, String> key : numberVersions.entrySet()) {
+	            String value = key.getValue();
+	            String nomeav=object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).getJSONObject(z).getString("name");
+	            if(value.compareTo(nomeav)==0) {
+	            	int iv=Integer.parseInt(key.getKey());
+	            	ArrayList<String> riferimento=new ArrayList<>();
+			    	riferimento.add(Integer.toString(iv));
+			    	riferimento.add(object1.getJSONObject(k).get("key").toString());
+			    	ticket.add(riferimento);
+	            }
+		    }
+		}
+		return ticket;
+	}
+	
 	public static List<ArrayList<String>> foundBuggy(String projectName) throws  JSONException, IOException {
 		String token = new String(Files.readAllBytes(Paths.get("C:\\Users\\gabri\\OneDrive\\Desktop\\"+projectName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
@@ -169,19 +187,7 @@ public class GetMetrics {
 	    			    iv=calculateFvIv(nameReleaseIv,projectName);
 	    				
     					p=calculateP(fv,ov,iv);
-	    				for(int z = 0;z<object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).length();z++) {
-	    					for (Entry<String, String> key : numberVersions.entrySet()) {
-		    		            String value = key.getValue();
-		    		            String nomeav=object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).getJSONObject(z).getString("name");
-		    		            if(value.compareTo(nomeav)==0) {
-		    		            	iv=Integer.parseInt(key.getKey());
-		    		            	ArrayList<String> riferimento=new ArrayList<>();
-			    			    	riferimento.add(Integer.toString(iv));
-			    			    	riferimento.add(object1.getJSONObject(k).get("key").toString());
-			    			    	ticket.add(riferimento);
-		    		            }
-		    			    }
-		    			}
+	    				ticket.addAll(haveAv(k,object1,numberVersions));
 
 	    			}
 	    		}
