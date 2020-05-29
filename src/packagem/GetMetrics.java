@@ -162,11 +162,7 @@ public class GetMetrics {
 	    			    fv=calculateFvIv(nameReleaseFv,projectName);
 	    			    iv=calculateFvIv(nameReleaseIv,projectName);
 	    				
-    					if((fv-ov)==0) {
-	    		        	p=1;
-	    		        }else {
-	    		        	p=(fv-iv)/(fv-ov);
-	    		        }
+    					p=calculateP(fv,ov,iv);
 	    				for(int z = 0;z<object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).length();z++) {
 	    					for (Entry<String, String> key : numberVersions.entrySet()) {
 		    		            String value = key.getValue();
@@ -251,7 +247,6 @@ public class GetMetrics {
 		}else {
 			values.add("0");
 		}
-		values.add(Integer.toString(maxChurn));
 		values.add(Float.toString((float)churn/count));
 		values.add(Integer.toString(nr));
 		values.add(buggy);
@@ -296,5 +291,12 @@ public class GetMetrics {
 			}
 		}
 		return fileBuggy;
+	}
+	public static int calculateP(int fv,int ov,int iv) {
+		if((fv-ov)==0) {
+        	return 1;
+        }else {
+        	return (fv-iv)/(fv-ov);
+        }
 	}
 }
