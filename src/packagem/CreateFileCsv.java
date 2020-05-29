@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +20,16 @@ public class CreateFileCsv {
 	public static final String AUTHOR="author";
 	
 
+	public static List<Integer> subTakeSha(int i,String data3,Date data){
+		ArrayList<Integer> arraySha= new ArrayList<>();
+		if(OperationDate.convertData(data3).after(data)){
+			arraySha.add(i);
+		}else {
+			return arraySha;
+		}
+		return arraySha;
+	}
+	
 	public static List<Integer> takeSha(Date data,Date data1,String projectName) throws IOException, JSONException {
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projectName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
@@ -28,17 +37,9 @@ public class CreateFileCsv {
 		for(int i=0;i<object.length() ;i++) {
 			String data3=object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date");
 			if(data1==null) {
-				if(OperationDate.convertData(data3).after(data)){
-					arraySha.add(i);
-				}else {
-					return arraySha;
-				}
-			}else if(OperationDate.convertData(data3).after(data)) {
-					if(OperationDate.convertData(data3).before(data1)) {
-						arraySha.add(i);
-					}
-			}else {
-				return arraySha;
+				arraySha.addAll(subTakeSha(i,data3,data));
+			}else if(OperationDate.convertData(data3).before(data1)) {	
+				arraySha.addAll(subTakeSha(i,data3,data));
 			}
 		}
 		return arraySha;
@@ -83,7 +84,7 @@ public class CreateFileCsv {
 	
 	public static void main(String[] args) throws IOException, JSONException, InterruptedException {
 
-		String projName ="TAJO";
+		String projName ="BOOKKEEPER";
 		ArrayList<ArrayList<String>> ticketBuggy=(ArrayList<ArrayList<String>>) GetMetrics.foundBuggy(projName);
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
