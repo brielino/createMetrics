@@ -135,7 +135,31 @@ public class GetMetrics {
 		return ticket;
 	}
 	
-	public static List<ArrayList<String>> haveAv(int k,JSONArray object1,HashMap<String,String> numberVersions) throws NumberFormatException, JSONException{
+	public static List<ArrayList<String>> haveAv1(int k,JSONArray object1,Map<String,String> numberVersions,JSONArray object,String projectName,int[] p) throws JSONException, IOException{
+		List<ArrayList<String>> ticket=new ArrayList<>();
+		for(int i = 0;i<object.length();i++) {
+			Boolean prima=verifiCorrisp(object.getJSONObject(i).getJSONObject(COMMIT).getString(MESSAGE),object1.getJSONObject(k).get("key").toString());
+			if(Boolean.TRUE.equals(prima)) {
+				String nameReleaseIv = object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).getJSONObject(0).getString("name").toString();
+				if(object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(FIXVERSIONS).length()==0) {
+					break;
+				}
+				String nameReleaseFv = object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(FIXVERSIONS).getJSONObject(0).getString("name").toString();
+				String nameReleaseOv = object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date");
+				Date dataOv = OperationDate.convertData(nameReleaseOv);
+				int ov=foundVersion(dataOv,projectName);
+			    int fv=calculateFvIv(nameReleaseFv,projectName);
+			    int iv=calculateFvIv(nameReleaseIv,projectName);
+				
+				p[0]=calculateP(fv,ov,iv);
+				ticket.addAll(haveAv(k,object1,numberVersions));
+
+			}
+		}
+		return ticket;
+	}
+	
+	public static List<ArrayList<String>> haveAv(int k,JSONArray object1,Map<String,String> numberVersions) throws JSONException{
 		List<ArrayList<String>> ticket=new ArrayList<>();
 		for(int z = 0;z<object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).length();z++) {
 			for (Entry<String, String> key : numberVersions.entrySet()) {
@@ -159,38 +183,14 @@ public class GetMetrics {
 	    String token1 =new String(Files.readAllBytes(Paths.get("C:\\Users\\gabri\\OneDrive\\Desktop\\"+projectName+"Jira.json")));
 	    JSONArray object1 =new JSONArray(token1);
 		List<ArrayList<String>> ticket=new ArrayList<>();
-	    int p=0;
-		int ov=0;
-		int fv=0;
-		int iv=0;
-	    Boolean prima;
+	    int[] p=new int[1];
+	    p[0]=0;
 		HashMap<String,String> numberVersions= (HashMap<String, String>) readFileName(PATH1+PATH2+PATH3+projectName+INFO);
-	    String nameReleaseIv="";
-	    String nameReleaseFv="";
-	    String nameReleaseOv="";
 	    for(int k = object1.length()-1;k>=0;k--) {
 	    	if(object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).length()==0) {
-	    		ticket.addAll(notHaveAv(object,object1,k,projectName,p));
+	    		ticket.addAll(notHaveAv(object,object1,k,projectName,p[0]));
 	    	}else {
-	    		for(int i = 0;i<object.length();i++) {
-	    			prima=verifiCorrisp(object.getJSONObject(i).getJSONObject(COMMIT).getString(MESSAGE),object1.getJSONObject(k).get("key").toString());
-	    			if(Boolean.TRUE.equals(prima)) {
-	    				nameReleaseIv = object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).getJSONObject(0).getString("name").toString();
-	    				if(object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(FIXVERSIONS).length()==0) {
-	    					break;
-	    				}
-	    				nameReleaseFv = object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(FIXVERSIONS).getJSONObject(0).getString("name").toString();
-	    				nameReleaseOv = object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date");
-	    				Date dataOv = OperationDate.convertData(nameReleaseOv);
-	    				ov=foundVersion(dataOv,projectName);
-	    			    fv=calculateFvIv(nameReleaseFv,projectName);
-	    			    iv=calculateFvIv(nameReleaseIv,projectName);
-	    				
-    					p=calculateP(fv,ov,iv);
-	    				ticket.addAll(haveAv(k,object1,numberVersions));
-
-	    			}
-	    		}
+	    		ticket.addAll(haveAv1(k,object1,numberVersions,object,projectName,p));
 	    	}
 	    }
 	    return ticket;
