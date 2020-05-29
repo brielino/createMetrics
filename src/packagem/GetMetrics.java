@@ -268,6 +268,21 @@ public class GetMetrics {
 	}
 	
 
+	public static List<ArrayList<String>> subFoundClassBuggy(Boolean prima,JSONArray object,int k,List<ArrayList<String>> ticketBuggy) throws JSONException{
+		List<ArrayList<String>> fileBuggy= new ArrayList<>();
+		if(Boolean.TRUE.equals(prima)) {
+			for(int z = 0;z<object.getJSONObject(k).getJSONArray(FILES).length();z++) {
+				ArrayList<String> fb = new ArrayList<>();
+				String version =ticketBuggy.get(k).get(0);
+				String file = object.getJSONObject(k).getJSONArray(FILES).getJSONObject(z).getString("filename").toString();
+				fb.add(version);
+				fb.add(file);
+				fileBuggy.add(fb);
+			}
+		}
+		return fileBuggy;
+	}
+	
 	
 	public static List<ArrayList<String>> foundClassBuggy(List<ArrayList<String>> ticketBuggy,JSONArray object) throws JSONException{
 		Boolean prima;
@@ -276,16 +291,7 @@ public class GetMetrics {
 			if(Integer.parseInt(ticketBuggy.get(k).get(0))!=0 && Integer.parseInt(ticketBuggy.get(k).get(0))>0) {
 				for(int i=0; i<object.length(); i++) {
 					prima=GetMetrics.verifiCorrisp(object.getJSONObject(i).getJSONObject(COMMIT).getString(MESSAGE),ticketBuggy.get(k).get(1));
-					if(Boolean.TRUE.equals(prima)) {
-						for(int z = 0;z<object.getJSONObject(k).getJSONArray(FILES).length();z++) {
-							ArrayList<String> fb = new ArrayList<>();
-							String version =ticketBuggy.get(k).get(0);
-							String file = object.getJSONObject(k).getJSONArray(FILES).getJSONObject(z).getString("filename").toString();
-							fb.add(version);
-							fb.add(file);
-							fileBuggy.add(fb);
-						}
-					}
+					fileBuggy.addAll(subFoundClassBuggy(prima,object,k,ticketBuggy));
 				}
 					
 			}
