@@ -110,6 +110,31 @@ public class GetMetrics {
 		return versionsName;
 	}
 	
+	public static List<ArrayList<String>> notHaveAv(JSONArray object,JSONArray object1,int k,String projectName,int p) throws JSONException, IOException {
+		List<ArrayList<String>> ticket=new ArrayList<>();
+		for(int i = 0;i<object.length();i++) {
+			Boolean prima=verifiCorrisp(object.getJSONObject(i).getJSONObject(COMMIT).getString(MESSAGE),object1.getJSONObject(k).get("key").toString());
+			if(Boolean.TRUE.equals(prima)) {
+				String nameReleaseOv = object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date");
+				Date dataOv = OperationDate.convertData(nameReleaseOv);
+				int ov=foundVersion(dataOv,projectName);
+				if(object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(FIXVERSIONS).length()==0) {
+					break;
+				}
+				String nameReleaseFv = object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(FIXVERSIONS).getJSONObject(0).getString("name").toString();
+			    int fv=calculateFvIv(nameReleaseFv,projectName);
+			    int iv=fv-(fv-ov)*p;
+			    if(ov>=iv && ov<fv) {
+			    	ArrayList<String> riferimento=new ArrayList<>();
+			    	riferimento.add(Integer.toString(iv));
+			    	riferimento.add(object1.getJSONObject(k).get("key").toString());
+			    	ticket.add(riferimento);
+			    }
+			}
+		}
+		return ticket;
+	}
+	
 	public static List<ArrayList<String>> foundBuggy(String projectName) throws  JSONException, IOException {
 		String token = new String(Files.readAllBytes(Paths.get("C:\\Users\\gabri\\OneDrive\\Desktop\\"+projectName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
@@ -127,26 +152,7 @@ public class GetMetrics {
 	    String nameReleaseOv="";
 	    for(int k = object1.length()-1;k>=0;k--) {
 	    	if(object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).length()==0) {
-	    		for(int i = 0;i<object.length();i++) {
-	    			prima=verifiCorrisp(object.getJSONObject(i).getJSONObject(COMMIT).getString(MESSAGE),object1.getJSONObject(k).get("key").toString());
-	    			if(Boolean.TRUE.equals(prima)) {
-	    				nameReleaseOv = object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date");
-	    				Date dataOv = OperationDate.convertData(nameReleaseOv);
-	    				ov=foundVersion(dataOv,projectName);
-	    				if(object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(FIXVERSIONS).length()==0) {
-	    					break;
-	    				}
-	    				nameReleaseFv = object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(FIXVERSIONS).getJSONObject(0).getString("name").toString();
-	    			    fv=calculateFvIv(nameReleaseFv,projectName);
-	    			    iv=fv-(fv-ov)*p;
-	    			    if(ov>=iv && ov<fv) {
-	    			    	ArrayList<String> riferimento=new ArrayList<>();
-	    			    	riferimento.add(Integer.toString(iv));
-	    			    	riferimento.add(object1.getJSONObject(k).get("key").toString());
-	    			    	ticket.add(riferimento);
-	    			    }
-	    			}
-	    		}
+	    		ticket.addAll(notHaveAv(object,object1,k,projectName,p));
 	    	}else {
 	    		for(int i = 0;i<object.length();i++) {
 	    			prima=verifiCorrisp(object.getJSONObject(i).getJSONObject(COMMIT).getString(MESSAGE),object1.getJSONObject(k).get("key").toString());
