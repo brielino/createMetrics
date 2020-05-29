@@ -65,8 +65,7 @@ public class CreateFileCsv {
 					fileWriter.append(metriche1.get(i));
 					fileWriter.append(",");
 				}
-				fileWriter.append("\n");
-				
+				fileWriter.append("\n");				
 			}
 		}
 	}
