@@ -30,22 +30,7 @@ public class CreateFileCsv {
 		return arraySha;
 	}
 	
-	public static List<Integer> takeSha(Date data,Date data1,String projectName) throws IOException, JSONException {
-		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projectName+"Commit.json")));
-	    JSONArray object = new JSONArray(token);
-		ArrayList<Integer> arraySha= new ArrayList<>();
-		for(int i=0;i<object.length() ;i++) {
-			String data3=object.getJSONObject(i).getJSONObject(COMMIT).getJSONObject(AUTHOR).getString("date");
-			if(data1==null) {
-				arraySha.addAll(subTakeSha(i,data3,data));
-			}else {
-				if(OperationDate.convertData(data3).before(data1)) {
-					arraySha.addAll(subTakeSha(i,data3,data));
-				}
-			}
-		}
-		return arraySha;
-	}
+
 
 	public static void writeFile(FileWriter fileWriter,List<String> indiceRelease,BufferedReader reader,JSONArray c,JSONArray object,List<ArrayList<String>>fileBuggy,List<Integer>shaCode) throws JSONException, IOException {
 		String line =indiceRelease.get(1);
@@ -135,7 +120,7 @@ public class CreateFileCsv {
 					}
 				}
 		    }catch (IOException e) {
-		    	logger.info("Errore");
+		    	logger.info("Errore file scrittura Aperto");
 		    }
 		}finally {
 			Logger logger = Logger.getAnonymousLogger();
