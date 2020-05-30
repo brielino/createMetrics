@@ -151,7 +151,7 @@ public class GetMetrics {
 			    int fv=calculateFvIv(nameReleaseFv,projectName);
 			    int iv=calculateFvIv(nameReleaseIv,projectName);
 				
-				p[0]=calculateP(fv,ov,iv);
+				calculateP(fv,ov,iv,p);
 				ticket.addAll(haveAv(k,object1,numberVersions));
 
 			}
@@ -324,11 +324,10 @@ public class GetMetrics {
 		}
 		return fileBuggy;
 	}
-	public static int calculateP(int fv,int ov,int iv) {
-		if((fv-ov)==0) {
-        	return 1;
-        }else {
-        	return (fv-iv)/(fv-ov);
+	public static void calculateP(int fv,int ov,int iv,int[] p) {
+		
+		if((fv-ov)!=0) {
+			p[0]=(fv-iv)/(fv-ov);
         }
 	}
 }
