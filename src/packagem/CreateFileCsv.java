@@ -62,8 +62,12 @@ public class CreateFileCsv {
 				fileWriter.append(size);
 				fileWriter.append(",");
 				for(int i=0;i<metriche1.size();i++) {
-					fileWriter.append(metriche1.get(i));
-					fileWriter.append(",");
+					if(i==(metriche1.size()-1)) {
+						fileWriter.append(metriche1.get(i));
+					}else {
+						fileWriter.append(metriche1.get(i));
+						fileWriter.append(",");
+					}
 				}
 				fileWriter.append("\n");				
 			}
