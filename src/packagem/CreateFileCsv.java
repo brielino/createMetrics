@@ -76,7 +76,7 @@ public class CreateFileCsv {
 	
 	public static void main(String[] args) throws IOException, JSONException, InterruptedException {
 
-		String projName ="BOOKKEEPER";
+		String projName ="TAJO";
 		ArrayList<ArrayList<String>> ticketBuggy=(ArrayList<ArrayList<String>>) GetMetrics.foundBuggy(projName);
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
