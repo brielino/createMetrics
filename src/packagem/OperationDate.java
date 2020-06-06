@@ -17,6 +17,7 @@ public class OperationDate {
 	}
 
 	public static Date convertData(String dateInString) {
+		/* mi permette di convertire una stringa in formato yyyy-MM-dd in formata Date*/
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Logger logger = Logger.getAnonymousLogger();
 	    try {
@@ -28,6 +29,9 @@ public class OperationDate {
 	}
 	
 	public static List<Date> calcoloDate(String version,String projectName){
+		/* Trovo le due date che mi indicano 
+		 * l'intervallo di competenza della versione indicata
+		 */
 		Date dataFile=convertData(takeDataVersion(version,projectName));
 		int versionS=Integer.parseInt(version);
 		versionS++;
@@ -44,6 +48,7 @@ public class OperationDate {
 	}
 	
 	public static String takeDataVersion(String version,String projectName) {
+		/* Metodo per ottenere la data di una determianta versione di Progetto */
 		String csvFile = "C:\\Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo Semestre 1\\ISW2\\Falessi\\20200407 Falessi Deliverable 2 Milestone 1 V2\\GetReleaseInfo\\"+projectName+"VersionInfo.csv";
 	    String line = "";
 	    String cvsSplitBy = ",";

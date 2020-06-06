@@ -19,6 +19,7 @@ public class TakeInfoProject {
 	}
 
 	public static List<String> subTakeContentClass(String[] nameRelease1,String nameRelease,int[] numberOfRequest,JSONArray files) throws InterruptedException, JSONException, IOException {
+		/* Metodo necessario per ridurre la complessità di takeContentClass */
 		ArrayList<String> allContent = new ArrayList<>();
 		if(nameRelease1[0].compareTo(nameRelease)!=0) {
 			nameRelease1[0]=nameRelease;
@@ -37,6 +38,9 @@ public class TakeInfoProject {
 		
 	}
 	public static void takeContentClass(String fileUrl,String projectName) throws IOException, JSONException, InterruptedException {
+		/* Metodo necessario per scaricare il contenuto delle classi e successivamente utilizzate per calcolare 
+		 * la metrica size
+		 */
 		String st1="https://api.github.com/repos/apache/";
 		String st2="/tags";
 		String st3="?page=";
@@ -85,6 +89,7 @@ public class TakeInfoProject {
 	}
 	
 	public static void takeJiraInfo(String pathFile,String projectName) throws IOException, JSONException {
+		/* Metodo per scaricare e scrivere u file le informazioni di Jira di un determinato progetto */
 		JSONArray json1=new JSONArray();
 	    Integer j = 0;
 	    Integer i = 0; 
@@ -116,7 +121,8 @@ public class TakeInfoProject {
 	}
 	
 	public static void getCommit(String urlFile,String projectName) throws IOException, JSONException {
-	    JSONArray object = new JSONArray();
+	    /* Metodo per scaricare i commit da GitHub di un progetto */
+		JSONArray object = new JSONArray();
 		String url1 = "https://api.github.com/repos/apache/"+projectName+"/commits";
 		String url2 = "?page=";
 		String url3 = "&per_page=100";
@@ -148,6 +154,7 @@ public class TakeInfoProject {
 	}
 	
 	public static List<String> verificsVersion(String version,String projectName) {
+		/* Metodo per la lettura del File contenente le info delle versioni */
 		HashMap<String,String> numberVersions= (HashMap<String, String>) GetMetrics.readFileName("C:\\Users\\gabri\\OneDrive\\Desktop\\Bri\\Magistrale Bri\\Secondo Semestre 1\\ISW2\\Falessi\\20200407 Falessi Deliverable 2 Milestone 1 V2\\GetReleaseInfo\\"+projectName+"VersionInfo.csv");
 		String corrispondenza="";
 		List<String> verVersion= new ArrayList<>();
@@ -163,6 +170,7 @@ public class TakeInfoProject {
 		return verVersion;		
 	}
 	public static int sleep(int nRequest) throws InterruptedException {
+		/* Metodo necessario per evitare di fare piu' di 5000 richieste l'ora */
 		if(nRequest==4500) {
 			TimeUnit.HOURS.sleep(1);
 			nRequest=0;

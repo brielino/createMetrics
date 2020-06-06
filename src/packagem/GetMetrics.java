@@ -37,6 +37,9 @@ public class GetMetrics {
 	}
 	
 	public static String getSize(String code) {
+		/* Metodo necessario per convertire il contenuto di una classe Criptato in Stringa
+		 * e calcolarne il LOC
+		 */
 		String classe=new String(Base64.getMimeDecoder().decode(code));
 		int size=0;
 		for(int i=0; i<classe.length() ; i++) {
@@ -48,6 +51,7 @@ public class GetMetrics {
 	}
 	
 	public static int foundVersion(Date data,String projectName) throws IOException {
+	/* Mi permette di individuare da una Data la versione a cui fa riferimento */
 		 String csvFile =PATH1+PATH2+PATH3+projectName+INFO;
 	     String line = "";
 	     String cvsSplitBy = ",";
@@ -84,6 +88,7 @@ public class GetMetrics {
 
 	
 	public static Map<String, String> readFileName(String nameFile) {
+		/* Metodo per ottenere il numero di versione associato al rispettivo nome (Es. 0.2.0) */ 
 		 String csvFile = nameFile;
 	     String line = "";
 	     String cvsSplitBy = ",";
@@ -111,6 +116,7 @@ public class GetMetrics {
 	}
 	
 	public static List<ArrayList<String>> notHaveAv(JSONArray object,JSONArray object1,int k,String projectName,int p) throws JSONException, IOException {
+		/* Metodo per verificare se un determinato ticket di jira che non ha l'AV è o meno Buggy */
 		List<ArrayList<String>> ticket=new ArrayList<>();
 		for(int i = 0;i<object.length();i++) {
 			Boolean prima=verifiCorrisp(object.getJSONObject(i).getJSONObject(COMMIT).getString(MESSAGE),object1.getJSONObject(k).get("key").toString());
@@ -136,6 +142,9 @@ public class GetMetrics {
 	}
 	
 	public static List<ArrayList<String>> haveAv1(int k,JSONArray object1,Map<String,String> numberVersions,JSONArray object,String projectName,int[] p) throws JSONException, IOException{
+		/* Metodo che mi permette di individuare i ticket di Jira che hanno l'AV 
+		 * aggiungendo alla lista il nome dei ticket che contengono classi Buggy
+		 */
 		List<ArrayList<String>> ticket=new ArrayList<>();
 		for(int i = 0;i<object.length();i++) {
 			Boolean prima=verifiCorrisp(object.getJSONObject(i).getJSONObject(COMMIT).getString(MESSAGE),object1.getJSONObject(k).get("key").toString());
@@ -160,6 +169,9 @@ public class GetMetrics {
 	}
 	
 	public static List<ArrayList<String>> haveAv(int k,JSONArray object1,Map<String,String> numberVersions) throws JSONException{
+		/* Metodo che mi permette di individuare i ticket di Jira che hanno l'AV 
+		 * aggiungendo alla lista il nome dei ticket che contengono classi Buggy
+		 */
 		List<ArrayList<String>> ticket=new ArrayList<>();
 		for(int z = 0;z<object1.getJSONObject(k).getJSONObject(FIELDS).getJSONArray(VERSIONS).length();z++) {
 			for (Entry<String, String> key : numberVersions.entrySet()) {
@@ -196,6 +208,7 @@ public class GetMetrics {
 	    return ticket;
 	}
 	public static boolean verifiCorrisp(String str1,String str2) {
+		/* Metodo per vedere se c'è corrispondenza tra due ticket */
 		Boolean first=false;
 		Boolean second =false;
 		first=str1.contains(str2+":");
@@ -209,6 +222,7 @@ public class GetMetrics {
 	}
 	
 	public static String subCalculateMetrics(List<ArrayList<String>> ticketBuggy,String version,String fileName) {
+		/*Metodo introdotto per ridurre la complessità del metodo che calcola le metriche */
 		String buggy="NO";
 		for(int k=0;k<ticketBuggy.size();k++) {
 			if(ticketBuggy.get(k).get(0).compareTo(version)==0 && ticketBuggy.get(k).get(1).compareTo(fileName)==0) {
@@ -219,6 +233,9 @@ public class GetMetrics {
 	}
 	
 	public static List<String> createMetrics(int[] loc,int maxLocAdd,int count,int nr,int churn,int maxChurn,String buggy){
+		/* Metodo per raccogliere tutte le informazioni di una classe di una determinata release
+		 * e raggrupparle in un unico Array
+		 */
 		List<String> values=new ArrayList<>();
 		values.add(Integer.toString(loc[0]));
 		values.add(Integer.toString(loc[1]));
@@ -239,6 +256,7 @@ public class GetMetrics {
 		return values;
 	}
 	public static List<String> calculateMetrics(String fileName,String version,List<Integer> codicisha,JSONArray json,List<ArrayList<String>> ticketBuggy) throws IOException, JSONException {
+		/* Metodo per calcolare le metriche scelte per questo progetto esclusa SIZE */
 		int locT=0;
 		int locAdd=0;
 		int maxLocAdd=0;
@@ -281,6 +299,7 @@ public class GetMetrics {
 	}
 	
 	public static int calculateFvIv(String fv,String projectName){
+		/* Metodo per calcolare l'indice FV e IV */
 		HashMap<String,String> numberVersions= (HashMap<String, String>) GetMetrics.readFileName(PATH1+PATH2+PATH3+projectName+INFO);
 		int v = 0;
 		for (Entry<String, String> key : numberVersions.entrySet()) {
@@ -295,6 +314,7 @@ public class GetMetrics {
 	
 
 	public static List<ArrayList<String>> subFoundClassBuggy(Boolean prima,JSONArray object,int k,List<ArrayList<String>> ticketBuggy) throws JSONException{
+		/* Metodo per ridurre la complessità di foundClassBuggy */
 		List<ArrayList<String>> fileBuggy= new ArrayList<>();
 		if(Boolean.TRUE.equals(prima)) {
 			for(int z = 0;z<object.getJSONObject(k).getJSONArray(FILES).length();z++) {
@@ -311,6 +331,7 @@ public class GetMetrics {
 	
 	
 	public static List<ArrayList<String>> foundClassBuggy(List<ArrayList<String>> ticketBuggy,JSONArray object) throws JSONException{
+		/*Metodo per individuare le classi che hanno molto probabilmente un Bug */
 		Boolean prima;
 	    List<ArrayList<String>> fileBuggy= new ArrayList<>();
 		for(int k = 0;k<ticketBuggy.size();k++) {
@@ -325,7 +346,7 @@ public class GetMetrics {
 		return fileBuggy;
 	}
 	public static void calculateP(int fv,int ov,int iv,int[] p) {
-		
+		/* Metodo per caloclare P utilizzato per il metodo Propotion */
 		if((fv-ov)!=0) {
 			p[0]=(fv-iv)/(fv-ov);
         }

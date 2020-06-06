@@ -21,6 +21,7 @@ public class CreateFileCsv {
 	
 
 	public static List<Integer> subTakeSha(int i,String data3,Date data){
+		/*Metodo per ridurre la complessità di takeSha */ 
 		ArrayList<Integer> arraySha= new ArrayList<>();
 		if(OperationDate.convertData(data3).after(data)){
 			arraySha.add(i);
@@ -31,6 +32,7 @@ public class CreateFileCsv {
 	}
 	
 	public static List<Integer> takeSha(Date data,Date data1,String projectName) throws IOException, JSONException {
+		/* Metodo per ottenere tutti i commit che fanno riferimento ad un determinato intervallo */
 		String token = new String(Files.readAllBytes(Paths.get(PERCORSO+projectName+"Commit.json")));
 	    JSONArray object = new JSONArray(token);
 		ArrayList<Integer> arraySha= new ArrayList<>();
@@ -48,6 +50,7 @@ public class CreateFileCsv {
 	}
 
 	public static void writeFile(FileWriter fileWriter,List<String> indiceRelease,BufferedReader reader,JSONArray c,JSONArray object,List<ArrayList<String>>fileBuggy,List<Integer>shaCode) throws JSONException, IOException {
+		/*Metodo per scrivere le metriche della classe */
 		String line =indiceRelease.get(1);
 		for(int j = 0; j < c.length();j++) {
 			String[] v=c.getJSONObject(j).getString("path").split("/");
